@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#185FA5">
+<title>Europa 2026 — Andrés & Mailyn</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#185FA5;--blue-l:#E6F1FB;--green:#3B6D11;--green-l:#EAF3DE;--orange:#854F0B;--orange-l:#FAEEDA;--red:#A32D2D;--red-l:#FCEBEB;--pink:#72243E;--pink-l:#FBEAF0;--purple:#534AB7;--bg:#f8f9fa;--card:#ffffff;--text:#1a1a1a;--muted:#666;--border:#e0e0e0;--bg2:#f2f3f5}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:680px;margin:0 auto;padding:0.8rem}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#185FA5,#534AB7);border-radius:16px;padding:1.1rem 1.3rem;margin-bottom:0.8rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.hdr h1{font-size:19px;font-weight:800;color:white}
+.hdr p{font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px}
+.hdr-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid rgba(255,255,255,0.4)}
+.av-a{background:#B5D4F4;color:#042C53}
+.av-m{background:#F4C0D1;color:#4B1528}
+.badge-days{background:rgba(255,255,255,0.2);color:white;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+
+/* TIMELINE */
+.tl-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0.9rem 1rem;margin-bottom:0.8rem;overflow-x:auto}
+.tl-label-top{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.tl-track{display:flex;align-items:center;min-width:460px}
+.tl-city{display:flex;flex-direction:column;align-items:center;flex:1}
+.tl-dot{width:13px;height:13px;border-radius:50%;border:2px solid;transition:all 0.3s;cursor:pointer}
+.tl-dot.done{background:#639922;border-color:#639922;box-shadow:0 0 0 3px #c0dd97}
+.tl-dot.pending{background:white;border-color:#b4b2a9}
+.tl-line{height:2px;flex:1;margin:0 -1px;transition:background 0.3s}
+.tl-line.done{background:#639922}
+.tl-line.pending{background:#d3d1c7}
+.tl-name{font-size:9px;color:var(--muted);margin-top:4px;text-align:center;white-space:nowrap}
+.tl-date{font-size:8px;color:var(--muted);opacity:0.7}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:0.8rem}
+@media(min-width:400px){.stats{grid-template-columns:repeat(4,1fr)}}
+.st{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 11px}
+.stl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px}
+.stv{font-size:18px;font-weight:800;color:var(--text);margin:2px 0}
+.sts{font-size:9px;color:var(--muted)}
+
+/* TABS */
+.tabs{display:flex;gap:3px;margin-bottom:0.8rem;background:var(--bg2);padding:3px;border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 13px;font-size:11px;cursor:pointer;color:var(--muted);border:none;background:none;border-radius:9px;white-space:nowrap;transition:all 0.2s;font-weight:600;flex-shrink:0}
+.tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.12)}
+.sec{display:none}.sec.active{display:block}
+
+/* CITY CARDS */
+.city-card{border:1px solid var(--border);border-radius:14px;margin-bottom:9px;overflow:hidden;background:var(--card);transition:all 0.3s}
+.city-card.completed{border-color:#9FE1CB;background:linear-gradient(135deg,#fff,#f0fdf7)}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;gap:8px}
+.ch:hover{background:var(--bg2)}
+.chl{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.cflag{font-size:22px;flex-shrink:0}
+.cname{font-size:13px;font-weight:700;color:var(--text)}
+.cdates{font-size:10px;color:var(--muted);margin-top:1px}
+.c-act{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.cbadge{font-size:9px;padding:2px 7px;border-radius:20px;white-space:nowrap;font-weight:600}
+.bok{background:#EAF3DE;color:#27500A}.bpend{background:#FAEEDA;color:#633806}.burg{background:#FCEBEB;color:#791F1F}
+.comp-btn{padding:4px 10px;font-size:10px;border-radius:20px;border:1px solid var(--border);background:var(--card);cursor:pointer;color:var(--muted);transition:all 0.2s;font-weight:600}
+.comp-btn:hover,.comp-btn.done{background:#EAF3DE;color:#27500A;border-color:#9FE1CB}
+.chev{font-size:10px;color:var(--muted);transition:transform 0.2s;flex-shrink:0}
+.chev.open{transform:rotate(180deg)}
+.cbody{border-top:1px solid var(--border)}
+.cbody.hid{display:none}
+.ctabs{display:flex;background:var(--bg2);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ctabs::-webkit-scrollbar{display:none}
+.ctab{padding:7px 12px;font-size:10px;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;font-weight:600;flex-shrink:0}
+.ctab.active{color:var(--text);border-bottom-color:var(--blue)}
+.cpanel{display:none;padding:12px 14px}.cpanel.active{display:block}
+
+/* ROWS */
+.row{display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);gap:8px}
+.row:last-child{border-bottom:none}
+.rl{font-size:10px;color:var(--muted);width:80px;flex-shrink:0;padding-top:2px}
+.rv{font-size:11px;color:var(--text);flex:1;text-align:right;line-height:1.5}
+.rv a{color:var(--blue);text-decoration:none}
+.rv a:hover{text-decoration:underline}
+.map-btn{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--blue);text-decoration:none;background:var(--blue-l);padding:2px 8px;border-radius:20px;margin-top:3px}
+
+/* ACTIVITIES */
+.act{padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start}
+.act:last-child{border-bottom:none}
+.adot{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.d-free{background:#639922}.d-paid{background:#185FA5}.d-food{background:#D85A30}
+.atxt{font-size:11px;color:var(--text);line-height:1.4;flex:1}
+.aprice{font-size:10px;color:var(--muted);margin-top:2px}
+.aprice a{color:var(--blue)}
+
+/* ALERTS */
+.abox{border-radius:10px;padding:9px 11px;margin-bottom:8px;border-left:3px solid}
+.abox:last-child{margin-bottom:0}
+.a-red{background:#FCEBEB;border-color:#A32D2D}.a-red .atxt2{color:#791F1F}
+.a-amb{background:#FAEEDA;border-color:#854F0B}.a-amb .atxt2{color:#633806}
+.a-blue{background:#E6F1FB;border-color:#185FA5}.a-blue .atxt2{color:#0C447C}
+.a-green{background:#EAF3DE;border-color:#3B6D11}.a-green .atxt2{color:#27500A}
+.a-pink{background:#FBEAF0;border-color:#72243E}.a-pink .atxt2{color:#72243E}
+.atxt2{font-size:11px;line-height:1.5}
+.at{font-weight:700;display:block;margin-bottom:2px}
+
+/* HOURS */
+.hr-row{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.hr-row:last-child{border-bottom:none}
+.hrtime{font-size:10px;font-weight:700;color:var(--blue);width:46px;flex-shrink:0;padding-top:1px}
+.hrline{width:2px;background:var(--blue-l);align-self:stretch;flex-shrink:0;border-radius:1px;margin:2px 0}
+.hrinfo{flex:1}
+.hrtitle{font-size:11px;font-weight:600;color:var(--text)}
+.hrdesc{font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4}
+.hrdesc a{color:var(--blue)}
+
+/* RATING */
+.rating-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:6px}
+.rating-row:last-child{border-bottom:none}
+.rating-lbl{font-size:12px;color:var(--text)}
+.faces{display:flex;gap:3px}
+.face-btn{font-size:22px;cursor:pointer;opacity:0.4;transition:all 0.2s;padding:2px;border-radius:6px;border:none;background:none;line-height:1}
+.face-btn:hover{opacity:1;transform:scale(1.2)}
+.face-btn.sel{opacity:1;transform:scale(1.15);background:var(--bg2)}
+
+/* MAP ITALY */
+.map-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px}
+.map-c{position:relative;width:100%;max-width:320px;margin:0 auto}
+.italy-svg{width:100%;height:auto;display:block}
+.city-mk{cursor:pointer;transition:transform 0.2s}
+.city-mk:hover .city-mk-circle{r:11}
+.route-anim{stroke-dasharray:8,4}
+.route-anim animate{attributeName:stroke-dashoffset;from:0;to:-24;dur:1.5s;repeatCount:indefinite}
+.map-info{background:var(--bg2);border-radius:10px;padding:10px 12px;margin-top:10px;display:none}
+.map-info-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.map-info-detail{font-size:11px;color:var(--muted)}
+.map-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.leg-i{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
+.leg-d{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* CALENDAR */
+.cal-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:9px}
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.cal-month{font-size:15px;font-weight:700;color:var(--text)}
+.cal-nav{background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);padding:3px 8px;border-radius:7px}
+.cal-nav:hover{background:var(--card)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0.5px;background:var(--border)}
+.cal-dh{background:var(--bg2);text-align:center;padding:7px 2px;font-size:10px;font-weight:700;color:var(--muted)}
+.cal-day{background:var(--card);padding:4px 3px;min-height:56px;cursor:pointer;transition:background 0.15s;border-top:0.5px solid var(--border)}
+.cal-day:hover{background:var(--bg2)}
+.cal-day.om{opacity:0.3}
+.cal-day.today{background:#E6F1FB}
+.cal-day.today .dnum{color:var(--blue);font-weight:800}
+.dnum{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px;text-align:center}
+.cal-ev{font-size:7.5px;padding:2px 3px;border-radius:3px;margin:1px 0;text-align:left;line-height:1.35;display:block;word-break:break-word;white-space:normal}
+.ev-bcn{background:#B5D4F4;color:#042C53}
+.ev-cat{background:#F5C4B3;color:#4A1B0C}
+.ev-sor{background:#9FE1CB;color:#04342C}
+.ev-flo{background:#FAC775;color:#412402}
+.ev-ven{background:#CECBF6;color:#26215C}
+.ev-rom{background:#F4C0D1;color:#4B1528}
+.ev-sp{background:#EF9F27;color:#412402}
+.ev-fl{background:#97C459;color:#173404}
+.ev-hot{background:#F4C0D1;color:#4B1528}
+
+/* TASKS */
+.task-phdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.p-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.p-name{font-size:14px;font-weight:700;color:var(--text)}
+.add-btn{padding:6px 13px;font-size:11px;border-radius:20px;border:1px solid var(--blue);color:var(--blue);background:var(--blue-l);cursor:pointer;font-weight:700;transition:all 0.2s}
+.add-btn:hover{background:var(--blue);color:white}
+.t-input-row{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.t-input{flex:1;min-width:120px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;font-size:11px;background:var(--card);color:var(--text)}
+.t-sel{padding:8px;border:1px solid var(--border);border-radius:9px;font-size:11px;background:var(--card);color:var(--text)}
+.t-add{padding:8px 14px;border-radius:9px;border:none;background:var(--blue);color:white;cursor:pointer;font-size:12px;font-weight:700}
+.task-item{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:11px;margin-bottom:6px;border:1px solid var(--border);background:var(--card);transition:all 0.2s}
+.task-item.done{opacity:0.55;background:var(--bg2)}
+.chk{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-top:1px;background:var(--card);transition:all 0.2s}
+.chk.done{background:#639922;border-color:#639922}
+.chktxt{font-size:11px;color:var(--text);flex:1;line-height:1.4}
+.chktxt.done{text-decoration:line-through;color:var(--muted)}
+.t-del{font-size:14px;color:var(--muted);cursor:pointer;padding:0 3px;opacity:0;transition:opacity 0.2s;flex-shrink:0}
+.task-item:hover .t-del{opacity:1}
+.tbadge{font-size:9px;padding:2px 7px;border-radius:10px;flex-shrink:0;white-space:nowrap;font-weight:600}
+.tb-now{background:#FCEBEB;color:#A32D2D}
+.tb-week{background:#FAEEDA;color:#854F0B}
+.tb-bef{background:#E6F1FB;color:#185FA5}
+.tb-done{background:#EAF3DE;color:#3B6D11}
+
+/* SPECIAL TASK */
+.special-task{background:linear-gradient(135deg,#FBEAF0,#fff5f8);border:2px solid #F4C0D1;border-radius:14px;padding:12px 14px;margin-top:14px}
+.special-task-hdr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.s-emoji{font-size:24px}
+.s-txt{font-size:12px;color:var(--pink);font-weight:700;flex:1}
+.s-btn{padding:6px 13px;border-radius:20px;border:1px solid #F4C0D1;background:var(--pink-l);color:var(--pink);cursor:pointer;font-size:11px;font-weight:700;transition:all 0.2s;white-space:nowrap}
+.s-btn:hover{background:var(--pink);color:white}
+.s-msg{display:none;margin-top:8px;font-size:11px;color:var(--pink);background:white;border-radius:8px;padding:8px 11px;border:1px solid #F4C0D1;line-height:1.6}
+.s-msg.show{display:block}
+
+/* TRANSPORT */
+.tr-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.tr-row:last-child{border-bottom:none}
+.tr-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ipl{background:#EAF3DE}.itr{background:#E6F1FB}.ibus{background:#FAEEDA}
+.tr-info{flex:1;min-width:0}
+.tr-route{font-size:11px;font-weight:700;color:var(--text)}
+.tr-det{font-size:10px;color:var(--muted);margin-top:1px}
+.tr-det a{color:var(--blue)}
+.tr-r{text-align:right;flex-shrink:0}
+
+/* BUDGET */
+.bg-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+@media(min-width:400px){.bg-grid{grid-template-columns:repeat(4,1fr)}}
+.mini{background:var(--bg2);border-radius:10px;padding:10px 12px}
+.ml{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px}
+.mv{font-size:18px;font-weight:800;color:var(--text);margin:2px 0}
+.ms{font-size:9px;color:var(--muted)}
+.bg-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)}
+.bg-row:last-child{border-bottom:none}
+.bg-cat{font-size:11px;color:var(--text);flex:1}
+.bg-bar-w{width:80px;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden;flex-shrink:0}
+.bg-bar{height:100%;border-radius:2px}
+.bg-amt{font-size:11px;font-weight:700;color:var(--text);width:50px;text-align:right;flex-shrink:0}
+
+/* CLOTHES */
+.cl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:9px}
+@media(min-width:400px){.cl-grid{grid-template-columns:repeat(3,1fr)}}
+.cl-item{background:var(--bg2);border-radius:10px;padding:9px 11px}
+.cl-cat{font-size:9px;color:var(--muted);margin-bottom:4px;font-weight:700;text-transform:uppercase}
+.cl-item p{font-size:10px;color:var(--text);line-height:1.6}
+
+/* TIPS */
+.tip-b{background:var(--bg2);border-radius:9px;padding:9px 11px;margin-bottom:7px}
+.tip-b p{font-size:11px;color:var(--muted);line-height:1.5}
+.tip-b strong{color:var(--text);font-weight:700}
+.sec-title{font-size:13px;font-weight:700;color:var(--text);margin:12px 0 8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:9px}
+
+/* CELEBRATION */
+.cel-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;display:flex;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,0.1)}
+.cel-overlay.hid{display:none}
+.cel-box{background:white;border-radius:20px;padding:1.5rem 2rem;text-align:center;animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);box-shadow:0 20px 60px rgba(0,0,0,0.25);position:relative;z-index:2;max-width:280px}
+.cel-emoji{font-size:56px;animation:dance 0.5s ease infinite alternate;display:block;margin-bottom:8px}
+.cel-text{font-size:18px;font-weight:800;color:#185FA5;margin-bottom:4px}
+.cel-sub{font-size:12px;color:#888;margin-bottom:12px}
+.cel-close{font-size:11px;color:#aaa;cursor:pointer;background:none;border:none;padding:4px 10px}
+.conf-wrap{position:fixed;top:0;left:0;right:0;bottom:0;z-index:998;pointer-events:none}
+.conf{position:absolute;width:8px;height:8px;border-radius:2px;animation:fall linear forwards}
+@keyframes popIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes dance{from{transform:translateY(0) rotate(-10deg)}to{transform:translateY(-10px) rotate(10deg)}}
+@keyframes fall{from{transform:translateY(-20px) rotate(0);opacity:1}to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* NAUGHTY */
+.naughty-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
+.naughty-overlay.hid{display:none}
+.naughty-box{background:white;border-radius:20px;padding:1.8rem 1.5rem;text-align:center;max-width:300px;width:100%;animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275)}
+.n-emoji{font-size:52px;margin-bottom:10px;display:block}
+.n-title{font-size:17px;font-weight:800;color:#72243E;margin-bottom:8px}
+.n-msg{font-size:13px;color:#555;line-height:1.6;margin-bottom:16px}
+.n-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.n-btn{padding:10px 18px;border-radius:20px;border:none;cursor:pointer;font-size:12px;font-weight:700;transition:transform 0.2s}
+.n-btn:hover{transform:scale(1.04)}
+.n-btn-yes{background:linear-gradient(135deg,#72243E,#D85A30);color:white}
+.n-btn-no{background:linear-gradient(135deg,#888,#555);color:white}
+
+/* FOOTER */
+.footer{text-align:center;padding:1.5rem 0 0.5rem;font-size:10px;color:var(--muted)}
+
+.sbadge{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:4px 9px;border-radius:20px;white-space:nowrap;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent;line-height:1.3}
+.sbadge:active{transform:scale(0.92)}
+.sbadge small{font-size:8px;opacity:0.6}
+.sb-ok{background:#EAF3DE;color:#27500A;border:1px solid #9FE1CB}
+.sb-pend{background:#FAEEDA;color:#633806;border:1px solid #F5C86A}
+.sb-urg{background:#FCEBEB;color:#791F1F;border:1px solid #F4A3A3;animation:urg-pulse 2s ease infinite}
+.sb-cancel{background:#f0f0f0;color:#888;border:1px solid #ccc;text-decoration:line-through}
+@keyframes urg-pulse{0%,100%{box-shadow:0 0 0 0 rgba(163,45,45,0.25)}60%{box-shadow:0 0 0 5px rgba(163,45,45,0)}}
+
+/* NOTAS EDITABLES */
+.nota-wrap{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.nota-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between}
+.nota-label span{font-size:9px;color:var(--blue);cursor:pointer;font-weight:700}
+.nota-area{width:100%;min-height:60px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;font-size:11px;font-family:inherit;background:var(--bg2);color:var(--text);resize:vertical;line-height:1.5;transition:border 0.2s}
+.nota-area:focus{outline:none;border-color:var(--blue);background:var(--card)}
+.nota-saved{font-size:9px;color:var(--green);margin-top:4px;opacity:0;transition:opacity 0.5s}
+.nota-saved.show{opacity:1}
+/* STAT EDITABLE */
+.stv-edit{cursor:pointer;border-bottom:1px dashed var(--muted);display:inline-block}
+.stv-edit:hover{border-bottom-color:var(--blue);color:var(--blue)}
+.stat-input-wrap{display:none;margin-top:4px}
+.stat-input-wrap.show{display:block}
+.stat-inp{width:100%;padding:4px 7px;border:1px solid var(--blue);border-radius:6px;font-size:13px;font-weight:800;background:var(--card);color:var(--text);text-align:center}
+.hdr-foto{width:58px;height:58px;border-radius:50%;border:2.5px solid rgba(255,255,255,0.8);object-fit:cover;object-position:center top;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="hdr">
+  <div>
+    <h1>Europa 2026 ✈️</h1>
+    <p>Andrés Reyes & Mailyn Castro · 2-22 mayo · 20 noches · 6 ciudades + París 24h</p>
+  </div>
+  <div class="hdr-r">
+    <div class="badge-days" id="countdown">...</div>
+    <img class="hdr-foto" src="data:image/jpeg;base64,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" alt="AR & MG">
+    <div class="av av-a">AR</div>
+    <div class="av av-m">MG</div>
+  </div>
+</div>
+
+<div class="tl-wrap">
+  <div class="tl-label-top">Ruta del viaje</div>
+  <div class="tl-track">
+    <div class="tl-city"><div class="tl-dot pending" id="dot-bcn"></div><div class="tl-name">🇪🇸 BCN</div><div class="tl-date">3-6 may</div></div>
+    <div class="tl-line pending" id="line-1"></div>
+    <div class="tl-city"><div class="tl-dot pending" id="dot-cat"></div><div class="tl-name">🌋 CTA</div><div class="tl-date">6-10 may</div></div>
+    <div class="tl-line pending" id="line-2"></div>
+    <div class="tl-city"><div class="tl-dot pending" id="dot-sor"></div><div class="tl-name">🌊 SOR</div><div class="tl-date">11-13</div></div>
+    <div class="tl-line pending" id="line-3"></div>
+    <div class="tl-city"><div class="tl-dot pending" id="dot-flo"></div><div class="tl-name">🎨 FLO</div><div class="tl-date">13-16</div></div>
+    <div class="tl-line pending" id="line-4"></div>
+    <div class="tl-city"><div class="tl-dot pending" id="dot-ven"></div><div class="tl-name">🚤 VEN</div><div class="tl-date">16-18</div></div>
+    <div class="tl-line pending" id="line-5"></div>
+    <div class="tl-city"><div class="tl-dot pending" id="dot-rom"></div><div class="tl-name">🏛️ ROM</div><div class="tl-date">18-22</div></div>
+    <div class="tl-line pending" id="line-6"></div>
+    <div class="tl-city"><div class="tl-dot pending" id="dot-par"></div><div class="tl-name">🇫🇷 PAR</div><div class="tl-date">22 may</div></div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="st"><div class="stl">Presupuesto</div><div class="stv">€5.465</div><div class="sts">19M COP + €1.000</div></div>
+  <div class="st"><div class="stl">Pagado <span style="font-size:8px;color:var(--blue);cursor:pointer" onclick="editPagado()">✏️</span></div><div class="stv stv-edit" style="color:#3B6D11" id="pagado-v" onclick="editPagado()">€615</div><div class="stat-input-wrap" id="pagado-wrap"><input class="stat-inp" id="pagado-inp" type="text" placeholder="€615" onblur="savePagado()" onkeydown="if(event.key==='Enter')savePagado()"></div><div class="sts" id="pagado-sub">Hotel BCN</div></div>
+  <div class="st"><div class="stl">Tareas</div><div class="stv" id="pct-el">0%</div><div class="sts">Completadas</div></div>
+  <div class="st"><div class="stl">Días</div><div class="stv" id="days-el">20</div><div class="sts">Para el viaje</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('itinerario',this)">Itinerario</button>
+  <button class="tab" onclick="showTab('mapa',this)">Mapa Italia</button>
+  <button class="tab" onclick="showTab('calendario',this)">Calendario</button>
+  <button class="tab" onclick="showTab('tareas-a',this)">Andrés</button>
+  <button class="tab" onclick="showTab('tareas-m',this)">Mailyn</button>
+  <button class="tab" onclick="showTab('transporte',this)">Transporte</button>
+  <button class="tab" onclick="showTab('presupuesto',this)">Presupuesto</button>
+  <button class="tab" onclick="showTab('maleta',this)">Maleta</button>
+  <button class="tab" onclick="showTab('tips',this)">Tips</button>
+</div>
+
+<!-- ITINERARIO -->
+<div id="itinerario" class="sec active">
+
+<div class="city-card" id="card-bcn">
+  <div class="ch" onclick="toggleCity('bcn',event)">
+    <div class="chl"><div class="cflag">🇪🇸</div><div><div class="cname">Barcelona</div><div class="cdates">3 – 6 mayo · 4 noches · Vuelo sale 6 mayo 17:00</div></div></div>
+    <div class="c-act"><button class="sbadge sb-ok" id="sb-hotel-bcn" onclick="cycleSB('hotel-bcn',event)">🏨 Hotel ✓ <small>↺</small></button><button class="comp-btn" id="btn-bcn" onclick="completeCity('bcn',event)">✓ Listo</button><span class="chev" id="chev-bcn">▼</span></div>
+  </div>
+  <div id="body-bcn" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('bcn','info',this)">Info</button><button class="ctab" onclick="showCityTab('bcn','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('bcn','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('bcn','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('bcn','alertas',this)">Alertas</button></div>
+    <div id="bcn-info" class="cpanel active">
+      <div class="row"><span class="rl">Hotel ✅</span><span class="rv"><strong>Hostal Central Barcelona</strong><br>Carrer Diputació 346 · Eixample<br>€575.10 pagado + €40 al llegar = <strong>€615.10 total</strong><br>🚕 Taxi aeropuerto→hotel incluido (solo ida)<br><a href="https://maps.google.com/?q=Hostal+Central+Barcelona" target="_blank" class="map-btn">📍 Google Maps</a></span></div>
+      <div class="row"><span class="rl">Aeropuerto</span><span class="rv"><a href="https://www.aerobusbarcelona.es" target="_blank">Aerobús ↗</a> €5.90 · 35 min<br><a href="https://maps.google.com/?q=Aerobús+Barcelona+T1" target="_blank" class="map-btn">📍 Parada T1</a></span></div>
+      <div class="row"><span class="rl">Metro</span><span class="rv">T-Casual 10 viajes €12.15 · <a href="https://www.tmb.cat" target="_blank">TMB App ↗</a></span></div>
+      <div class="row"><span class="rl">Entradas</span><span class="rv"><a href="https://sagradafamilia.org/es/visites" target="_blank">Sagrada Família €26 ↗</a><br><a href="https://www.parkguell.barcelona/es/comprar-entrades" target="_blank">Park Güell €10 ↗</a></span></div>
+      <div class="row"><span class="rl">Clima</span><span class="rv">18-22°C · Chaqueta para la noche</span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('bcn')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-bcn" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('bcn')"></textarea>
+        <div class="nota-saved" id="nota-saved-bcn">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('bcn')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-bcn" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-bcn">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="bcn-horario" class="cpanel">
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Día 3 — Llegada 12:50 PM</span>Ir suave. Vienen 17h de viaje desde Bogotá.</div></div>
+      <div class="hr-row"><div class="hrtime">13:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Aerobús → Hotel</div><div class="hrdesc"><a href="https://www.aerobusbarcelona.es" target="_blank">aerobusbarcelona.es ↗</a> · Sale cada 5 min</div></div></div>
+      <div class="hr-row"><div class="hrtime">17:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Barrio Gótico — perderse sin mapa</div><div class="hrdesc"><a href="https://maps.google.com/?q=Barrio+Gotico+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">20:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Cena primera noche en Barceloneta</div><div class="hrdesc"><a href="https://maps.google.com/?q=La+Barceloneta+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 4 — Gaudí</span></div></div>
+      <div class="hr-row"><div class="hrtime">08:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Sagrada Família — con entrada reservada</div><div class="hrdesc"><a href="https://maps.google.com/?q=Sagrada+Familia+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">10:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Passeig de Gràcia · Casa Batlló · La Pedrera</div><div class="hrdesc"><a href="https://maps.google.com/?q=Passeig+de+Gracia+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">15:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Park Güell · Barrio Gràcia</div><div class="hrdesc"><a href="https://maps.google.com/?q=Park+Guell+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">20:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Cena en El Born</div><div class="hrdesc"><a href="https://maps.google.com/?q=El+Born+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 5 — Barcelona alternativa</span></div></div>
+      <div class="hr-row"><div class="hrtime">07:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Bunkers del Carmel — amanecer · Gratis</div><div class="hrdesc"><a href="https://maps.google.com/?q=Turó+de+la+Rovira+Barcelona" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">10:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Sant Pau Modernista</div><div class="hrdesc">€15/p · <a href="https://www.santpaubarcelona.org" target="_blank">santpaubarcelona.org ↗</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">21:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Fuente Mágica — show gratuito</div><div class="hrdesc"><a href="https://maps.google.com/?q=Fuente+Magica+Montjuic" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="abox a-amb" style="margin-top:8px"><div class="atxt2"><span class="at">Día 6 — Vuelo 17:00 · Salir hotel 13:00</span>Aerobús desde Plaza Catalunya.</div></div>
+    </div>
+    <div id="bcn-act" class="cpanel">
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Sagrada Família — reservar YA</div><div class="aprice">€26/p · <a href="https://sagradafamilia.org/es/visites" target="_blank">sagradafamilia.org ↗</a> · <a href="https://maps.google.com/?q=Sagrada+Familia+Barcelona" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Park Güell zona monumental</div><div class="aprice">€10/p · <a href="https://www.parkguell.barcelona/es/comprar-entrades" target="_blank">parkguell.barcelona ↗</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Sant Pau Modernista</div><div class="aprice">€15/p · <a href="https://www.santpaubarcelona.org" target="_blank">santpaubarcelona.org ↗</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Bunkers del Carmel — mejor mirador · Gratis</div><div class="aprice">Ir al amanecer · <a href="https://maps.google.com/?q=Turó+de+la+Rovira+Barcelona" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Fuente Mágica Montjuïc — show gratuito</div><div class="aprice">Jue-Dom 21h · <a href="https://maps.google.com/?q=Fuente+Magica+Montjuic" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Pa amb tomàquet + Cervecería Catalana</div><div class="aprice">~€20/p · <a href="https://maps.google.com/?q=Cerveceria+Catalana+Barcelona" target="_blank">📍</a></div></div></div>
+    </div>
+    <div id="bcn-rating" class="cpanel">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Califica durante el viaje — desde el celular</div>
+      <div class="rating-row"><span class="rating-lbl">Sagrada Família</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Park Güell</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Gastronomía</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Hotel</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Barcelona en general</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="bcn-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">Reservar YA — Sagrada Família y Park Güell</span>Mayo es temporada alta. Se agotan antes del viaje.</div></div>
+      <div class="abox a-amb"><div class="atxt2"><span class="at">Carteristas</span>Las Ramblas, metro, Boquería. Morral al frente siempre.</div></div>
+      <div class="abox a-green"><div class="atxt2"><span class="at">Agua gratis</span>Pide "agua del grifo" en restaurantes. Potable y gratis.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="city-card" id="card-cat">
+  <div class="ch" onclick="toggleCity('cat',event)">
+    <div class="chl"><div class="cflag">🌋</div><div><div class="cname">Catania, Sicilia</div><div class="cdates">6 – 10 mayo · 4 noches · Boda Taormina 8 mayo</div></div></div>
+    <div class="c-act"><button class="sbadge sb-pend" id="sb-hotel-cat" onclick="cycleSB('hotel-cat',event)">🏨 Pendiente <small>↺</small></button><button class="comp-btn" id="btn-cat" onclick="completeCity('cat',event)">✓ Listo</button><span class="chev" id="chev-cat">▼</span></div>
+  </div>
+  <div id="body-cat" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('cat','info',this)">Info</button><button class="ctab" onclick="showCityTab('cat','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('cat','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('cat','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('cat','alertas',this)">Alertas</button></div>
+    <div id="cat-info" class="cpanel active">
+      <div class="row"><span class="rl">Hotel</span><span class="rv"><a href="https://www.booking.com/city/it/catania.html" target="_blank">B&B centro Catania ↗</a> · ~€80/noche<br><a href="https://maps.google.com/?q=centro+storico+Catania" target="_blank" class="map-btn">📍 Centro</a></span></div>
+      <div class="row"><span class="rl">Aeropuerto</span><span class="rv">Taxi fijo €15-20 · 10 min<br><a href="https://maps.google.com/?q=Aeroporto+Catania+Fontanarossa" target="_blank" class="map-btn">📍 Aeropuerto CTA</a></span></div>
+      <div class="row"><span class="rl">Taormina</span><span class="rv">Bus Interbus 1h · €3.50/p<br><a href="https://www.interbus.it" target="_blank">interbus.it ↗</a> · <a href="https://maps.google.com/?q=Taormina+Sicily" target="_blank" class="map-btn">📍 Taormina</a></span></div>
+      <div class="row"><span class="rl">Clima</span><span class="rv">22-26°C · Muy soleado · Protector solar</span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('cat')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-cat" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('cat')"></textarea>
+        <div class="nota-saved" id="nota-saved-cat">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('cat')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-cat" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-cat">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="cat-horario" class="cpanel">
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Día 6 mayo — Llegada vuelo 19:10</span>Taxi fijo €15-20 desde el aeropuerto. No negociar precio. Check-in y descanso.</div></div>
+      <div class="hr-row"><div class="hrtime">19:10</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Aterrizaje · Taxi al hotel</div><div class="hrdesc">€15-20 fijo · Fila oficial aeropuerto · <a href="https://maps.google.com/?q=Aeroporto+Catania+Fontanarossa" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">21:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Cena en Piazza del Duomo</div><div class="hrdesc">Pasta alla Norma · <a href="https://maps.google.com/?q=Piazza+del+Duomo+Catania" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 7 mayo — Etna + Mercado</span></div></div>
+      <div class="hr-row"><div class="hrtime">07:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Mercado Pescheria — antes que cierre</div><div class="hrdesc">Cierra a las 9AM · <a href="https://maps.google.com/?q=Pescheria+Catania" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">10:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Excursión Volcán Etna en jeep</div><div class="hrdesc">€30-50/p · Reservar desde el hotel · <a href="https://maps.google.com/?q=Mount+Etna+Sicily" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">14:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Almuerzo en Catania · tarde libre</div><div class="hrdesc">Arancini y granita con brioche</div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 8 mayo — Matrimonio en Taormina</span></div></div>
+      <div class="hr-row"><div class="hrtime">09:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Bus Interbus → Taormina</div><div class="hrdesc">1h · €3.50/p · <a href="https://www.interbus.it" target="_blank">interbus.it ↗</a> · <a href="https://maps.google.com/?q=Taormina+Sicily" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">10:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Teatro Greco antes de la boda</div><div class="hrdesc">€10/p · Vista al Etna y al mar · <a href="https://maps.google.com/?q=Teatro+Greco+Taormina" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Tarde</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">💒 Ceremonia de boda</div><div class="hrdesc">Ropa ligera de gala · Tacones cuidado en terreno irregular</div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 9 mayo — Noto + día libre</span></div></div>
+      <div class="hr-row"><div class="hrtime">10:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Noto — ciudad barroca UNESCO (opcional)</div><div class="hrdesc">Bus 1.5h · <a href="https://maps.google.com/?q=Noto+Sicily" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Tarde</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Tarde libre en Catania</div><div class="hrdesc">Piazza Duomo · Calles históricas</div></div></div>
+      <div class="abox a-amb" style="margin-top:8px"><div class="atxt2"><span class="at">Día 10 mayo — Vuelo a Nápoles</span>Comprar vuelo Catania→Nápoles · Ryanair/easyJet desde €15. Dejar maletas en hotel hasta salida.</div></div>
+    </div>
+    <div id="cat-act" class="cpanel">
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Volcán Etna en jeep o senderismo</div><div class="aprice">€30-50/p · <a href="https://maps.google.com/?q=Mount+Etna+Sicily" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Mercado Pescheria — antes de 9AM</div><div class="aprice">Gratis · <a href="https://maps.google.com/?q=Pescheria+Catania" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Taormina + Teatro Greco</div><div class="aprice">€10/p · Bus €3.50 · <a href="https://maps.google.com/?q=Teatro+Greco+Taormina" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Noto — ciudad barroca UNESCO</div><div class="aprice">Bus 1.5h · <a href="https://maps.google.com/?q=Noto+Sicily" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Pasta alla Norma + Granita con brioche</div><div class="aprice">Obligatorio en Catania</div></div></div>
+    </div>
+    <div id="cat-rating" class="cpanel">
+      <div class="rating-row"><span class="rating-lbl">Volcán Etna</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Boda en Taormina</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Gastronomía siciliana</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Catania en general</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="cat-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">Taxi precio fijo</span>No negocies. Fila oficial del aeropuerto. ~€15-20.</div></div>
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Protector solar</span>Sicilia en mayo = sol muy fuerte. Obligatorio.</div></div>
+      <div class="abox a-amb"><div class="atxt2"><span class="at">Boda Taormina — ropa ligera de gala</span>Calor. Tacones cuidado en terreno irregular.</div></div>
+      <div class="abox a-green"><div class="atxt2"><span class="at">Granita con brioche</span>EL desayuno de Sicilia. En cualquier bar ~€3.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="city-card" id="card-sor">
+  <div class="ch" onclick="toggleCity('sor',event)">
+    <div class="chl"><div class="cflag">🌊</div><div><div class="cname">Sorrento + Costa Amalfitana</div><div class="cdates">11 – 13 mayo · 3 noches · Pompeya · Capri · Positano</div></div></div>
+    <div class="c-act"><button class="sbadge sb-pend" id="sb-hotel-sor" onclick="cycleSB('hotel-sor',event)">🏨 Pendiente <small>↺</small></button><button class="comp-btn" id="btn-sor" onclick="completeCity('sor',event)">✓ Listo</button><span class="chev" id="chev-sor">▼</span></div>
+  </div>
+  <div id="body-sor" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('sor','info',this)">Info</button><button class="ctab" onclick="showCityTab('sor','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('sor','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('sor','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('sor','alertas',this)">Alertas</button></div>
+    <div id="sor-info" class="cpanel active">
+      <div class="row"><span class="rl">Hotel</span><span class="rv"><a href="https://www.booking.com/city/it/sorrento.html" target="_blank">Hotel Sorrento ↗</a> · ~€90/noche<br><a href="https://maps.google.com/?q=Sorrento+Italy" target="_blank" class="map-btn">📍 Sorrento</a></span></div>
+      <div class="row"><span class="rl">Desde NAP</span><span class="rv">Circumvesuviana 70 min · €3.50/p<br><a href="https://www.eavsrl.it" target="_blank">eavsrl.it ↗</a></span></div>
+      <div class="row"><span class="rl">Pompeya</span><span class="rv"><a href="https://www.pompeionline.net" target="_blank">pompeionline.net ↗</a> €18/p<br><a href="https://maps.google.com/?q=Pompeii+ruins" target="_blank" class="map-btn">📍 Pompeya</a></span></div>
+      <div class="row"><span class="rl">Capri</span><span class="rv">Ferry 20 min · €20 · <a href="https://maps.google.com/?q=Island+of+Capri" target="_blank" class="map-btn">📍 Capri</a></span></div>
+      <div class="row"><span class="rl">Positano</span><span class="rv">Bus SITA €2 · <a href="https://maps.google.com/?q=Positano+Amalfi+Coast" target="_blank" class="map-btn">📍 Positano</a></span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('sor')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-sor" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('sor')"></textarea>
+        <div class="nota-saved" id="nota-saved-sor">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('sor')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-sor" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-sor">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="sor-horario" class="cpanel">
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Día 11 mayo — Llegada desde Nápoles</span>Circumvesuviana 70 min · €3.50 · Llegan Sorrento al mediodía.</div></div>
+      <div class="hr-row"><div class="hrtime">12:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Llegada · Check-in hotel</div><div class="hrdesc"><a href="https://maps.google.com/?q=Sorrento+Italy" target="_blank">📍 Sorrento</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">15:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Piazza Tasso · centro de Sorrento</div><div class="hrdesc">Limoncello artesanal · <a href="https://maps.google.com/?q=Piazza+Tasso+Sorrento" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">19:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Atardecer Marina Piccola</div><div class="hrdesc">Gratis · Vista espectacular · <a href="https://maps.google.com/?q=Marina+Piccola+Sorrento" target="_blank">📍</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 12 mayo — Pompeya</span></div></div>
+      <div class="hr-row"><div class="hrtime">08:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Circumvesuviana → Pompeya</div><div class="hrdesc">30 min · €2.50 · Parada Pompei Scavi</div></div></div>
+      <div class="hr-row"><div class="hrtime">09:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Pompeya — mínimo 3-4 horas</div><div class="hrdesc">€18/p · <a href="https://www.pompeionline.net" target="_blank">Reservar online ↗</a> · Agua y sombrero</div></div></div>
+      <div class="hr-row"><div class="hrtime">14:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Regreso · Almuerzo en Sorrento</div><div class="hrdesc">Pizza napolitana real</div></div></div>
+      <div class="hr-row"><div class="hrtime">17:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Tarde libre · Tiendas de limoncello</div><div class="hrdesc">Callejones históricos de Sorrento</div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 13 mayo — Capri o Positano (elegir)</span></div></div>
+      <div class="hr-row"><div class="hrtime">07:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Opción A · Ferry a Capri</div><div class="hrdesc">20 min · €20 · Gruta Azul €14 · <a href="https://maps.google.com/?q=Capri+Island+Italy" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">07:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Opción B · Bus SITA → Positano</div><div class="hrdesc">€2 · Sentarse lado derecho · Vista increíble · <a href="https://maps.google.com/?q=Positano+Amalfi" target="_blank">📍</a></div></div></div>
+      <div class="abox a-amb" style="margin-top:8px"><div class="atxt2"><span class="at">Día 13 tarde — Salida a Florencia</span>Tren alta velocidad Nápoles→Florencia · <a href="https://www.italotreno.com" target="_blank">italotreno.com ↗</a></div></div>
+    </div>
+    <div id="sor-act" class="cpanel">
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Pompeya — imperdible</div><div class="aprice">€18/p · <a href="https://www.pompeionline.net" target="_blank">Reservar ↗</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Isla de Capri</div><div class="aprice">Ferry €20 · Gruta Azul €14</div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Positano — Costa Amalfitana</div><div class="aprice">Bus SITA €2 · <a href="https://maps.google.com/?q=Positano" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Pizza napolitana + Limoncello de Sorrento</div><div class="aprice">Obligatorio en la zona</div></div></div>
+    </div>
+    <div id="sor-rating" class="cpanel">
+      <div class="rating-row"><span class="rating-lbl">Pompeya</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Capri</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Positano</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="sor-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">Reservar Pompeya online</span>Sin reserva esperas 1-2h en mayo. <a href="https://www.pompeionline.net" target="_blank">pompeionline.net ↗</a></div></div>
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Bus a Positano</span>Siéntense al lado derecho subiendo — vista al mar espectacular.</div></div>
+      <div class="abox a-amb"><div class="atxt2"><span class="at">Circumvesuviana</span>Vigilar maletas. Solo morral de día en excursiones.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="city-card" id="card-flo">
+  <div class="ch" onclick="toggleCity('flo',event)">
+    <div class="chl"><div class="cflag">🎨</div><div><div class="cname">Florencia</div><div class="cdates">13 – 16 mayo · 3 noches</div></div></div>
+    <div class="c-act"><button class="sbadge sb-pend" id="sb-hotel-flo" onclick="cycleSB('hotel-flo',event)">🏨 Pendiente <small>↺</small></button><button class="comp-btn" id="btn-flo" onclick="completeCity('flo',event)">✓ Listo</button><span class="chev" id="chev-flo">▼</span></div>
+  </div>
+  <div id="body-flo" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('flo','info',this)">Info</button><button class="ctab" onclick="showCityTab('flo','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('flo','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('flo','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('flo','alertas',this)">Alertas</button></div>
+    <div id="flo-info" class="cpanel active">
+      <div class="row"><span class="rl">Hotel</span><span class="rv"><a href="https://www.booking.com/city/it/florence.html" target="_blank">Hotel Florencia ↗</a> · ~€90/noche<br><a href="https://maps.google.com/?q=Florence+Italy" target="_blank" class="map-btn">📍 Florencia</a></span></div>
+      <div class="row"><span class="rl">Accademia</span><span class="rv"><a href="https://www.galleriaaccademiafirenze.it" target="_blank">galleriaaccademiafirenze.it ↗</a> €20/p</span></div>
+      <div class="row"><span class="rl">Uffizi</span><span class="rv"><a href="https://www.uffizi.it" target="_blank">uffizi.it ↗</a> €25/p</span></div>
+      <div class="row"><span class="rl">Clima</span><span class="rv">20-24°C · Puede llover · Impermeable ligero</span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('flo')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-flo" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('flo')"></textarea>
+        <div class="nota-saved" id="nota-saved-flo">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('flo')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-flo" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-flo">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="flo-horario" class="cpanel">
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Día 14 mayo — Llegada desde Sorrento</span>Tren alta velocidad · Llegar tarde. Check-in y Piazzale Michelangelo al atardecer.</div></div>
+      <div class="hr-row"><div class="hrtime">Tarde</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Llegada · Check-in hotel</div><div class="hrdesc"><a href="https://maps.google.com/?q=Florence+Italy" target="_blank">📍 Florencia</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">18:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Piazzale Michelangelo — atardecer</div><div class="hrdesc">Gratis · Vista panorámica de toda la ciudad · <a href="https://maps.google.com/?q=Piazzale+Michelangelo+Florence" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">20:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Cena en Oltrarno</div><div class="hrdesc">Barrio auténtico · Bistecca alla Fiorentina · <a href="https://maps.google.com/?q=Oltrarno+Florence" target="_blank">📍</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 15 mayo — El David + Uffizi</span></div></div>
+      <div class="hr-row"><div class="hrtime">06:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Piazzale Michelangelo al amanecer</div><div class="hrdesc">Gratis · Sin turistas · <a href="https://maps.google.com/?q=Piazzale+Michelangelo+Florence" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">09:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Galería Accademia — El David original</div><div class="hrdesc">€20/p · <a href="https://www.galleriaaccademiafirenze.it" target="_blank">Reservar ↗</a> · <a href="https://maps.google.com/?q=Galleria+Accademia+Florence" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">11:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Galería Uffizi — Botticelli · Da Vinci</div><div class="hrdesc">€25/p · <a href="https://www.uffizi.it" target="_blank">uffizi.it ↗</a> · <a href="https://maps.google.com/?q=Uffizi+Gallery+Florence" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">14:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Puente Vecchio · Palazzo Pitti</div><div class="hrdesc"><a href="https://maps.google.com/?q=Ponte+Vecchio+Florence" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 16 mayo — Duomo + salida a Venecia</span></div></div>
+      <div class="hr-row"><div class="hrtime">09:00</div><div class="hrtime"></div><div class="hrinfo"><div class="hrtitle">Cúpula del Brunelleschi — Duomo</div><div class="hrdesc">€18/p · Vista increíble · <a href="https://maps.google.com/?q=Florence+Cathedral+Duomo" target="_blank">📍</a></div></div></div>
+      <div class="abox a-amb" style="margin-top:8px"><div class="atxt2"><span class="at">Día 16 tarde — Tren a Venecia</span>Florencia→Venecia 2h15 · <a href="https://www.italotreno.com" target="_blank">italotreno.com ↗</a></div></div>
+    </div>
+    <div id="flo-act" class="cpanel">
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Galería Accademia — El David original</div><div class="aprice">€20/p · <a href="https://www.galleriaaccademiafirenze.it" target="_blank">Reservar ↗</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Galería Uffizi — Botticelli, Da Vinci</div><div class="aprice">€25/p · <a href="https://www.uffizi.it" target="_blank">uffizi.it ↗</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Piazzale Michelangelo al amanecer 6AM</div><div class="aprice">Gratis · Sin turistas · <a href="https://maps.google.com/?q=Piazzale+Michelangelo+Florence" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Barrio Oltrarno — lado auténtico</div><div class="aprice">Gratis · <a href="https://maps.google.com/?q=Oltrarno+Florence" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Bistecca alla Fiorentina + Gelato artigianale</div><div class="aprice">Obligatorio</div></div></div>
+    </div>
+    <div id="flo-rating" class="cpanel">
+      <div class="rating-row"><span class="rating-lbl">El David (Accademia)</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Galería Uffizi</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Florencia en general</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="flo-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">El David está en la Accademia — no en los Uffizi</span></div></div>
+      <div class="abox a-amb"><div class="atxt2"><span class="at">Reservar galerías online</span>Sin reserva esperas 2-3h en mayo.</div></div>
+      <div class="abox a-green"><div class="atxt2"><span class="at">Gelato artigianale</span>Si tiene colores fluorescentes es industrial. Busca "artigianale".</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="city-card" id="card-ven">
+  <div class="ch" onclick="toggleCity('ven',event)">
+    <div class="chl"><div class="cflag">🚤</div><div><div class="cname">Venecia</div><div class="cdates">16 – 18 mayo · 2 noches</div></div></div>
+    <div class="c-act"><button class="sbadge sb-urg" id="sb-hotel-ven" onclick="cycleSB('hotel-ven',event)">🏨 Reservar HOY <small>↺</small></button><button class="comp-btn" id="btn-ven" onclick="completeCity('ven',event)">✓ Listo</button><span class="chev" id="chev-ven">▼</span></div>
+  </div>
+  <div id="body-ven" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('ven','info',this)">Info</button><button class="ctab" onclick="showCityTab('ven','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('ven','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('ven','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('ven','alertas',this)">Alertas</button></div>
+    <div id="ven-info" class="cpanel active">
+      <div class="row"><span class="rl">Hotel</span><span class="rv"><a href="https://www.booking.com/city/it/venice.html" target="_blank">Booking Venecia HOY ↗</a> · €150-180/noche<br><a href="https://maps.google.com/?q=Venice+Italy+island" target="_blank" class="map-btn">📍 Venecia isla</a></span></div>
+      <div class="row"><span class="rl">Alternativa</span><span class="rv"><a href="https://www.booking.com/searchresults.es.html?city=Mestre" target="_blank">Hotel Mestre ↗</a> · €80/n · Tranvía 15 min</span></div>
+      <div class="row"><span class="rl">Vaporetto</span><span class="rv">48h €45 · <a href="https://actv.avmspa.it" target="_blank">actv.avmspa.it ↗</a></span></div>
+      <div class="row"><span class="rl">Burano</span><span class="rv">Ferry 40 min · €8 · <a href="https://maps.google.com/?q=Burano+Venice" target="_blank" class="map-btn">📍 Burano</a></span></div>
+      <div class="row"><span class="rl">Tasa acceso</span><span class="rv">Verificar en <a href="https://cda.ve.it" target="_blank">cda.ve.it ↗</a></span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('ven')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-ven" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('ven')"></textarea>
+        <div class="nota-saved" id="nota-saved-ven">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('ven')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-ven" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-ven">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="ven-horario" class="cpanel">
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Día 16 mayo — Llegada desde Florencia</span>Tren 2h15. Llegan por la tarde. Dejar maletas y salir a caminar sin mapa.</div></div>
+      <div class="hr-row"><div class="hrtime">18:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Llegada · Vaporetto desde estación</div><div class="hrdesc">48h €45 · <a href="https://actv.avmspa.it" target="_blank">actv.avmspa.it ↗</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">19:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Plaza San Marcos de noche</div><div class="hrdesc">Sin turistas · Mágica de noche · <a href="https://maps.google.com/?q=Piazza+San+Marco+Venice" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">20:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Cena en Dorsoduro</div><div class="hrdesc">Cicchetti €1-2 · Barrio auténtico · <a href="https://maps.google.com/?q=Dorsoduro+Venice" target="_blank">📍</a></div></div></div>
+      <div class="abox a-green" style="margin-top:8px"><div class="atxt2"><span class="at">Día 17 mayo — Burano + Palacio Ducal</span></div></div>
+      <div class="hr-row"><div class="hrtime">07:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Ferry a Burano — primer barco</div><div class="hrdesc">40 min · €8 · Antes de 9AM sin turistas · <a href="https://maps.google.com/?q=Burano+Venice" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">10:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Regreso · Barrio de Cannaregio</div><div class="hrdesc">Barrio judío · El más tranquilo · <a href="https://maps.google.com/?q=Cannaregio+Venice" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">11:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Librería Acqua Alta — gratis</div><div class="hrdesc">La más famosa del mundo · <a href="https://maps.google.com/?q=Libreria+Acqua+Alta+Venice" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">14:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Palacio Ducal + Puente de los Suspiros</div><div class="hrdesc">€25/p · <a href="https://palazzoducale.visitmuve.it" target="_blank">Reservar ↗</a> · <a href="https://maps.google.com/?q=Palazzo+Ducale+Venice" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">17:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Perderse por Castello y San Polo</div><div class="hrdesc">Sin mapa · El verdadero secreto de Venecia</div></div></div>
+      <div class="abox a-amb" style="margin-top:8px"><div class="atxt2"><span class="at">Día 18 mayo — Salida a Roma</span>Tren Venecia→Roma 3h40 · <a href="https://www.italotreno.com" target="_blank">italotreno.com ↗</a></div></div>
+    </div>
+    <div id="ven-act" class="cpanel">
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Palacio Ducal + Puente de los Suspiros</div><div class="aprice">€25/p · <a href="https://palazzoducale.visitmuve.it" target="_blank">Reservar ↗</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Isla de Burano — casas de colores</div><div class="aprice">Ferry €8 · Ir antes de 9AM · <a href="https://maps.google.com/?q=Burano+Venice" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Librería Acqua Alta — única en el mundo</div><div class="aprice">Gratis · <a href="https://maps.google.com/?q=Libreria+Acqua+Alta+Venice" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Barrio Dorsoduro — vida local</div><div class="aprice">Gratis · <a href="https://maps.google.com/?q=Dorsoduro+Venice" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Cicchetti — tapas venecianas €1-2</div><div class="aprice">Barrio Dorsoduro</div></div></div>
+    </div>
+    <div id="ven-rating" class="cpanel">
+      <div class="rating-row"><span class="rating-lbl">Venecia isla</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Isla de Burano</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Gastronomía veneciana</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="ven-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">Reservar hotel HOY</span>Precio sube cada día. Se agota en mayo.</div></div>
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Piérdete sin mapa</span>El secreto de Venecia es caminar sin destino.</div></div>
+      <div class="abox a-green"><div class="atxt2"><span class="at">Burano de madrugada</span>Primer ferry 7AM. Antes de 9AM tienes la isla para ti solos.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="city-card" id="card-rom">
+  <div class="ch" onclick="toggleCity('rom',event)">
+    <div class="chl"><div class="cflag">🏛️</div><div><div class="cname">Roma</div><div class="cdates">18 – 22 mayo · 4 noches · Vuelo 22 mayo 17:40</div></div></div>
+    <div class="c-act"><button class="sbadge sb-urg" id="sb-hotel-rom" onclick="cycleSB('hotel-rom',event)">🏨 Reservar HOY <small>↺</small></button><button class="comp-btn" id="btn-rom" onclick="completeCity('rom',event)">✓ Listo</button><span class="chev" id="chev-rom">▼</span></div>
+  </div>
+  <div id="body-rom" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('rom','info',this)">Info</button><button class="ctab" onclick="showCityTab('rom','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('rom','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('rom','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('rom','alertas',this)">Alertas</button></div>
+    <div id="rom-info" class="cpanel active">
+      <div class="row"><span class="rl">Hotel</span><span class="rv"><a href="https://www.booking.com/hotel/it/centro-cavour-roma.html" target="_blank">Hotel Centro Cavour ↗</a> · €130-150/n<br><a href="https://maps.google.com/?q=Via+Cavour+237+Rome" target="_blank" class="map-btn">📍 Google Maps</a></span></div>
+      <div class="row"><span class="rl">Aeropuerto</span><span class="rv">Leonardo Express 35 min · €14<br><a href="https://maps.google.com/?q=Roma+Termini+station" target="_blank" class="map-btn">📍 Roma Termini</a></span></div>
+      <div class="row"><span class="rl">Coliseo</span><span class="rv"><a href="https://www.coopculture.it" target="_blank">coopculture.it ↗</a> €18/p</span></div>
+      <div class="row"><span class="rl">Vaticano</span><span class="rv"><a href="https://www.museivaticani.va" target="_blank">museivaticani.va ↗</a> €20/p</span></div>
+      <div class="row"><span class="rl">Vuelo</span><span class="rv">22 mayo 17:40 FCO · Salir hotel 13:30</span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('rom')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-rom" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('rom')"></textarea>
+        <div class="nota-saved" id="nota-saved-rom">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('rom')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-rom" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-rom">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="rom-horario" class="cpanel">
+      <div class="hr-row"><div class="hrtime">Día 1</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Coliseo + Foro Romano</div><div class="hrdesc"><a href="https://www.coopculture.it" target="_blank">coopculture.it ↗</a> · <a href="https://maps.google.com/?q=Colosseum+Rome" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Noche 1</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Trastevere</div><div class="hrdesc"><a href="https://maps.google.com/?q=Trastevere+Rome" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Día 2</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Vaticano + Capilla Sixtina</div><div class="hrdesc"><a href="https://www.museivaticani.va" target="_blank">museivaticani.va ↗</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Tarde 2</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Fontana Trevi · Navona · Panteón</div><div class="hrdesc"><a href="https://maps.google.com/?q=Trevi+Fountain+Rome" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Día 3</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Aventino — hueco secreto Caballeros de Malta</div><div class="hrdesc"><a href="https://maps.google.com/?q=Keyhole+Knights+Malta+Rome" target="_blank">📍 Mapa</a></div></div></div>
+      <div class="abox a-red" style="margin-top:8px"><div class="atxt2"><span class="at">22 mayo — Salir hotel 13:30 máximo</span>Tren Leonardo Express a Fiumicino 35 min.</div></div>
+    </div>
+    <div id="rom-act" class="cpanel">
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Coliseo + Foro Romano</div><div class="aprice">€18/p · <a href="https://www.coopculture.it" target="_blank">coopculture.it ↗</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Vaticano + Capilla Sixtina</div><div class="aprice">€20/p · <a href="https://www.museivaticani.va" target="_blank">museivaticani.va ↗</a> · Semanas antes</div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Fontana Trevi · Navona · Panteón</div><div class="aprice">Gratis · <a href="https://maps.google.com/?q=Trevi+Fountain+Rome" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Trastevere de noche</div><div class="aprice">Gratis · Mejor barrio de Roma · <a href="https://maps.google.com/?q=Trastevere+Rome" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Aventino — hueco Caballeros de Malta</div><div class="aprice">Vista única del Vaticano · <a href="https://maps.google.com/?q=Keyhole+Knights+Malta+Rome" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Cacio e Pepe + Agua gratis de nasoni</div><div class="aprice">~€12 · Cientos de fuentes potables en Roma</div></div></div>
+    </div>
+    <div id="rom-rating" class="cpanel">
+      <div class="rating-row"><span class="rating-lbl">Coliseo</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Vaticano</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Fontana di Trevi</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Roma en general</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="rom-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">Vaticano — reservar semanas antes</span><a href="https://www.museivaticani.va" target="_blank">museivaticani.va ↗</a></div></div>
+      <div class="abox a-red"><div class="atxt2"><span class="at">22 mayo — No perder el vuelo</span>Salir hotel 13:30 máximo. Leonardo Express 35 min.</div></div>
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Código vestimenta Vaticano</span>Hombros y rodillas cubiertos. Obligatorio.</div></div>
+      <div class="abox a-green"><div class="atxt2"><span class="at">Fontana di Trevi — ir 7AM</span>A las 7AM casi vacía. Al mediodía hay cientos de personas.</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="city-card" id="card-par">
+  <div class="ch" onclick="toggleCity('par',event)">
+    <div class="chl"><div class="cflag">🇫🇷</div><div><div class="cname">París</div><div class="cdates">22 mayo · 24 horas · Escala regreso a Bogotá</div></div></div>
+    <div class="c-act"><button class="sbadge sb-pend" id="sb-hotel-par" onclick="cycleSB('hotel-par',event)">🏨 Escala <small>↺</small></button><button class="comp-btn" id="btn-par" onclick="completeCity('par',event)">✓ Listo</button><span class="chev" id="chev-par">▼</span></div>
+  </div>
+  <div id="body-par" class="cbody hid">
+    <div class="ctabs"><button class="ctab active" onclick="showCityTab('par','info',this)">Info</button><button class="ctab" onclick="showCityTab('par','horario',this)">Horario</button><button class="ctab" onclick="showCityTab('par','act',this)">Actividades</button><button class="ctab" onclick="showCityTab('par','rating',this)">Calificar</button><button class="ctab" onclick="showCityTab('par','alertas',this)">Alertas</button></div>
+    <div id="par-info" class="cpanel active">
+      <div class="row"><span class="rl">Situación</span><span class="rv">Escala 24h en CDG · Air France Roma → París → Bogotá</span></div>
+      <div class="row"><span class="rl">Aeropuerto</span><span class="rv">Charles de Gaulle (CDG)<br><a href="https://maps.google.com/?q=Charles+de+Gaulle+Airport+Paris" target="_blank" class="map-btn">📍 CDG</a></span></div>
+      <div class="row"><span class="rl">Al centro</span><span class="rv">RER B tren directo · 35 min · €11<br><a href="https://maps.google.com/?q=Gare+du+Nord+Paris" target="_blank" class="map-btn">📍 Gare du Nord</a></span></div>
+      <div class="row"><span class="rl">Hotel</span><span class="rv"><a href="https://www.booking.com/city/fr/paris.html" target="_blank">Booking París ↗</a> · Zona Le Marais ~€120/n<br><a href="https://maps.google.com/?q=Le+Marais+Paris" target="_blank" class="map-btn">📍 Le Marais</a></span></div>
+      <div class="row"><span class="rl">Metro</span><span class="rv">Tarjeta t+ · €1.90 por viaje · App <a href="https://www.ratp.fr" target="_blank">RATP ↗</a></span></div>
+      <div class="row"><span class="rl">Clima</span><span class="rv">14-18°C · Puede llover · Impermeable</span></div>
+        <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas (hotel, confirmación, precio...)<span onclick="clearNota('par')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-par" placeholder="Escribe aquí: nombre del hotel, # confirmación, precio real, lo que quieras..." oninput="saveNota('par')"></textarea>
+        <div class="nota-saved" id="nota-saved-par">✓ Guardado</div>
+      </div>
+      <div class="nota-wrap">
+        <div class="nota-label">📝 Mis notas — hotel, confirmación, lo que sea<span onclick="clearNota('par')">Borrar</span></div>
+        <textarea class="nota-area" id="nota-par" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
+        <div class="nota-saved" id="nota-saved-par">✓ Guardado automático</div>
+      </div>
+    </div>
+    <div id="par-horario" class="cpanel">
+      <div class="abox a-amber"><div class="atxt2"><span class="at">⚠️ Confirmar con Air France</span>Verificar si la escala permite salir del aeropuerto o es conexión directa. Si es conexión directa no se puede salir sin arriesgar el vuelo a Bogotá.</div></div>
+      <div class="hr-row"><div class="hrtime">Llegan</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Aeropuerto CDG · RER B al centro</div><div class="hrdesc">35 min · €11 · Sale desde Terminal 2</div></div></div>
+      <div class="hr-row"><div class="hrtime">Mañana</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Desayuno francés real</div><div class="hrdesc">Croissant + café au lait + crêpe · En cualquier brasserie ~€10</div></div></div>
+      <div class="hr-row"><div class="hrtime">09:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Torre Eiffel — Plaza del Trocadero</div><div class="hrdesc">Ver desde abajo · Gratis · La mejor foto · <a href="https://maps.google.com/?q=Trocadero+Paris" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">10:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Campos Elíseos → Arco del Triunfo</div><div class="hrdesc">15 min caminando · Gratis · <a href="https://maps.google.com/?q=Arc+de+Triomphe+Paris" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">12:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Barrio Le Marais — almuerzo</div><div class="hrdesc">El más bonito y auténtico · <a href="https://maps.google.com/?q=Le+Marais+Paris" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">14:30</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Notre Dame — reabrió en 2024</div><div class="hrdesc">Gratis · Ver la restauración tras el incendio · <a href="https://maps.google.com/?q=Notre+Dame+Cathedral+Paris" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">16:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Montmartre + Sacré-Cœur</div><div class="hrdesc">Barrio bohemio · Vista de toda París · Gratis · <a href="https://maps.google.com/?q=Sacré-Cœur+Montmartre+Paris" target="_blank">📍</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">20:00</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Crucero por el Sena de noche</div><div class="hrdesc">Torre Eiffel iluminada desde el río · €15/p · <a href="https://www.bateauxparisiens.com" target="_blank">bateauxparisiens.com ↗</a></div></div></div>
+      <div class="hr-row"><div class="hrtime">Vuelo</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Regreso al aeropuerto CDG</div><div class="hrdesc">RER B · 35 min · Salir con 3h de anticipación</div></div></div>
+    </div>
+    <div id="par-act" class="cpanel">
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Torre Eiffel — Plaza del Trocadero</div><div class="aprice">Gratis verla · Subir €29/p · <a href="https://www.toureiffel.paris" target="_blank">toureiffel.paris ↗</a> · <a href="https://maps.google.com/?q=Eiffel+Tower+Paris" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Campos Elíseos + Arco del Triunfo</div><div class="aprice">Gratis caminar · <a href="https://maps.google.com/?q=Champs+Elysées+Paris" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Notre Dame — reabrió en 2024</div><div class="aprice">Gratis · <a href="https://maps.google.com/?q=Notre+Dame+Cathedral+Paris" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Montmartre + Sacré-Cœur</div><div class="aprice">Gratis · Mejor vista de París · <a href="https://maps.google.com/?q=Sacré-Cœur+Montmartre" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-free"></div><div><div class="atxt">Barrio Le Marais — el más bonito</div><div class="aprice">Gratis · Callejones siglo XVII · <a href="https://maps.google.com/?q=Le+Marais+Paris" target="_blank">📍</a></div></div></div>
+      <div class="act"><div class="adot d-paid"></div><div><div class="atxt">Crucero por el Sena de noche</div><div class="aprice">€15/p · Torre Eiffel iluminada · <a href="https://www.bateauxparisiens.com" target="_blank">bateauxparisiens.com ↗</a></div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Croissant + crêpe Nutella + macarons</div><div class="aprice">Obligatorio en París · ~€15 para dos</div></div></div>
+      <div class="act"><div class="adot d-food"></div><div><div class="atxt">Sopa de cebolla francesa</div><div class="aprice">~€12 · La Jacobine o Le Procope</div></div></div>
+    </div>
+    <div id="par-rating" class="cpanel">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Califica tu día en París</div>
+      <div class="rating-row"><span class="rating-lbl">Torre Eiffel</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Notre Dame</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">Crucero Sena</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+      <div class="rating-row"><span class="rating-lbl">París en general</span><div class="faces"><button class="face-btn" onclick="rate(this)">😢</button><button class="face-btn" onclick="rate(this)">😐</button><button class="face-btn" onclick="rate(this)">🙂</button><button class="face-btn" onclick="rate(this)">😄</button><button class="face-btn" onclick="rate(this)">🤩</button></div></div>
+    </div>
+    <div id="par-alertas" class="cpanel">
+      <div class="abox a-red"><div class="atxt2"><span class="at">Confirmar escala con Air France</span>Si es conexión directa no pueden salir del aeropuerto. Llamar a Air France o revisar el tiquete.</div></div>
+      <div class="abox a-amb"><div class="atxt2"><span class="at">Volver al aeropuerto con 3h de anticipación</span>El vuelo a Bogotá es largo. CDG es enorme. No arriesgar llegando tarde.</div></div>
+      <div class="abox a-amber"><div class="atxt2"><span class="at">Carteristas en zonas turísticas</span>Torre Eiffel, Montmartre y metro — misma precaución que en el resto de Europa.</div></div>
+      <div class="abox a-blue"><div class="atxt2"><span class="at">Intentar el francés básico</span>Bonjour · Merci · S'il vous plaît — los parisinos lo aprecian mucho.</div></div>
+      <div class="abox a-green"><div class="atxt2"><span class="at">Torre Eiffel iluminada</span>Cada hora en punto de noche hace un show de luces por 5 minutos. Espectacular desde el Sena.</div></div>
+    </div>
+  </div>
+</div>
+</div><!-- fin itinerario -->
+<div id="mapa" class="sec">
+  <div class="map-sec">
+    <div class="sec-title">Ruta por Italia 🚗 — AR & MG</div>
+    <div class="map-c">
+      <svg viewBox="0 0 240 420" class="italy-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#185FA5" opacity="0.7"/>
+          </marker>
+        </defs>
+        <!-- Italia boot shape -->
+        <path d="M62,22 L78,17 L98,20 L114,27 L120,38 L110,48 L94,53 L78,58 L68,68 L58,83 L53,98 L58,113 L68,128 L73,148 L68,168 L63,183 L58,203 L63,218 L78,228 L93,233 L103,248 L108,263 L118,273 L128,288 L138,303 L148,313 L158,323 L163,338 L158,353 L148,363 L138,368 L128,363 L118,353 L113,343 L118,333 L123,323 L113,313 L103,303 L93,293 L83,283 L78,268 L73,253 L68,238 L58,223 L48,213 L43,198 L45,178 L48,163 L43,148 L38,133 L43,118 L48,103 L53,88 L48,73 L43,58 L48,43 L58,30 Z" fill="#E8EDF2" stroke="#B4B2A9" stroke-width="1.5"/>
+        <!-- Sicilia -->
+        <path d="M57,343 L72,338 L87,343 L92,353 L87,363 L72,368 L57,363 L50,353 Z" fill="#E8EDF2" stroke="#B4B2A9" stroke-width="1.5"/>
+        <!-- Sardegna -->
+        <path d="M16,143 L26,138 L31,148 L33,163 L29,178 L21,183 L13,173 L11,158 Z" fill="#E8EDF2" stroke="#B4B2A9" stroke-width="1.5" opacity="0.5"/>
+
+        <!-- RUTAS ANIMADAS -->
+        <path d="M74,351 L82,293 L87,248 L90,218" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-dasharray="7,4" opacity="0.9" marker-end="url(#arr)">
+          <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.2s" repeatCount="indefinite"/>
+        </path>
+        <path d="M90,218 L84,193 L77,168 L72,148" fill="none" stroke="#185FA5" stroke-width="2.5" stroke-dasharray="7,4" opacity="0.9" marker-end="url(#arr)">
+          <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.2s" repeatCount="indefinite"/>
+        </path>
+        <path d="M72,148 L82,128 L97,113 L113,103" fill="none" stroke="#534AB7" stroke-width="2.5" stroke-dasharray="7,4" opacity="0.9" marker-end="url(#arr)">
+          <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.2s" repeatCount="indefinite"/>
+        </path>
+        <path d="M113,103 L103,123 L93,148 L84,168 L80,193 L82,213 L84,233" fill="none" stroke="#1D9E75" stroke-width="2.5" stroke-dasharray="7,4" opacity="0.9" marker-end="url(#arr)">
+          <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.2s" repeatCount="indefinite"/>
+        </path>
+
+        <!-- MARKERS CIUDADES -->
+        <g onclick="mapClick('Catania','6-10 mayo · 🌋 Etna · 💒 Boda Taormina · Pasta alla Norma')" style="cursor:pointer">
+          <circle cx="74" cy="351" r="11" fill="#F5C4B3" stroke="#D85A30" stroke-width="2.5"/>
+          <text x="74" y="356" text-anchor="middle" font-size="9" font-weight="800" fill="#4A1B0C">CTA</text>
+          <text x="74" y="369" text-anchor="middle" font-size="9" fill="#633806" font-weight="600">Catania</text>
+        </g>
+        <g onclick="mapClick('Nápoles / Sorrento','11-13 mayo · 🏛 Pompeya · ⛵ Capri · 🛣 Positano')" style="cursor:pointer">
+          <circle cx="90" cy="218" r="11" fill="#9FE1CB" stroke="#0F6E56" stroke-width="2.5"/>
+          <text x="90" y="223" text-anchor="middle" font-size="9" font-weight="800" fill="#04342C">SOR</text>
+          <text x="90" y="236" text-anchor="middle" font-size="9" fill="#085041" font-weight="600">Sorrento</text>
+        </g>
+        <g onclick="mapClick('Florencia','13-16 mayo · 🎨 David · Uffizi · Oltrarno al amanecer')" style="cursor:pointer">
+          <circle cx="72" cy="148" r="11" fill="#FAC775" stroke="#BA7517" stroke-width="2.5"/>
+          <text x="72" y="153" text-anchor="middle" font-size="9" font-weight="800" fill="#412402">FLO</text>
+          <text x="72" y="166" text-anchor="middle" font-size="9" fill="#633806" font-weight="600">Florencia</text>
+        </g>
+        <g onclick="mapClick('Venecia','16-18 mayo · 🚤 Burano · Palacio Ducal · Cicchetti en Dorsoduro')" style="cursor:pointer">
+          <circle cx="113" cy="103" r="11" fill="#CECBF6" stroke="#534AB7" stroke-width="2.5"/>
+          <text x="113" y="108" text-anchor="middle" font-size="9" font-weight="800" fill="#26215C">VEN</text>
+          <text x="113" y="121" text-anchor="middle" font-size="9" fill="#3C3489" font-weight="600">Venecia</text>
+        </g>
+        <g onclick="mapClick('Roma','18-22 mayo · 🏛️ Coliseo · Vaticano · Trastevere · Vuelo 22 mayo')" style="cursor:pointer">
+          <circle cx="84" cy="233" r="11" fill="#F4C0D1" stroke="#72243E" stroke-width="2.5"/>
+          <text x="84" y="238" text-anchor="middle" font-size="9" font-weight="800" fill="#4B1528">ROM</text>
+          <text x="84" y="251" text-anchor="middle" font-size="9" fill="#72243E" font-weight="600">Roma</text>
+        </g>
+
+        <!-- CARRITO ANIMADO -->
+        <g>
+          <animateMotion dur="10s" repeatCount="indefinite" rotate="auto">
+            <mpath href="#ruta-main"/>
+          </animateMotion>
+          <rect x="-9" y="-7" width="18" height="12" rx="3" fill="#185FA5"/>
+          <rect x="-7" y="-12" width="14" height="7" rx="2" fill="#378ADD"/>
+          <circle cx="-5" cy="5" r="3.5" fill="#1a1a1a"/>
+          <circle cx="5" cy="5" r="3.5" fill="#1a1a1a"/>
+          <circle cx="-5" cy="5" r="1.5" fill="#aaa"/>
+          <circle cx="5" cy="5" r="1.5" fill="#aaa"/>
+          <text x="0" y="-1" text-anchor="middle" font-size="5.5" fill="white" font-weight="bold">AR</text>
+        </g>
+        <path id="ruta-main" d="M74,351 L82,293 L87,248 L90,218 L84,193 L77,168 L72,148 L82,128 L97,113 L113,103 L103,123 L93,148 L84,168 L80,193 L82,213 L84,233" fill="none"/>
+
+        <!-- NUMEROS ORDEN -->
+        <text x="90" y="350" font-size="10" fill="#D85A30" font-weight="800">①</text>
+        <text x="58" y="220" font-size="10" fill="#0F6E56" font-weight="800">②</text>
+        <text x="48" y="148" font-size="10" fill="#BA7517" font-weight="800">③</text>
+        <text x="124" y="105" font-size="10" fill="#534AB7" font-weight="800">④</text>
+        <text x="97" y="235" font-size="10" fill="#72243E" font-weight="800">⑤</text>
+      </svg>
+    </div>
+    <div class="map-info" id="map-info">
+      <div class="map-info-name" id="map-city-name">Ciudad</div>
+      <div class="map-info-detail" id="map-city-info">Toca una ciudad</div>
+      <button onclick="document.getElementById('map-info').style.display='none'" style="margin-top:8px;font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--muted)">Cerrar</button>
+    </div>
+    <div class="map-legend">
+      <div class="leg-i"><div class="leg-d" style="background:#D85A30"></div>Catania</div>
+      <div class="leg-i"><div class="leg-d" style="background:#0F6E56"></div>Sorrento</div>
+      <div class="leg-i"><div class="leg-d" style="background:#BA7517"></div>Florencia</div>
+      <div class="leg-i"><div class="leg-d" style="background:#534AB7"></div>Venecia</div>
+      <div class="leg-i"><div class="leg-d" style="background:#72243E"></div>Roma</div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDARIO -->
+<div id="calendario" class="sec">
+  <div class="cal-wrap">
+    <div class="cal-hdr">
+      <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month" id="cal-title">Mayo 2026</div>
+      <button class="cal-nav" onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-dh">L</div><div class="cal-dh">M</div><div class="cal-dh">X</div><div class="cal-dh">J</div><div class="cal-dh">V</div><div class="cal-dh">S</div><div class="cal-dh">D</div>
+      <div id="cal-days" style="display:contents"></div>
+    </div>
+  </div>
+  <div class="card" id="cal-detail-box" style="display:none;border-left:3px solid var(--blue)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div class="sec-title" id="cal-detail-title" style="margin:0">Día seleccionado</div>
+      <button onclick="document.getElementById('cal-detail-box').style.display='none'" style="font-size:12px;border:none;background:none;cursor:pointer;color:var(--muted)">✕ Cerrar</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted)">Toca cualquier día con actividad para ver el detalle aquí. Ve al <strong>Itinerario</strong> para ver el horario completo de ese día.</div>
+  </div>
+  <div class="card">
+    <div class="sec-title" style="margin-top:0">Leyenda</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+      <span class="cal-ev ev-bcn" style="padding:3px 8px;font-size:10px;border-radius:4px">🇪🇸 Barcelona</span>
+      <span class="cal-ev ev-cat" style="padding:3px 8px;font-size:10px;border-radius:4px">🌋 Catania</span>
+      <span class="cal-ev ev-sor" style="padding:3px 8px;font-size:10px;border-radius:4px">🌊 Sorrento</span>
+      <span class="cal-ev ev-flo" style="padding:3px 8px;font-size:10px;border-radius:4px">🎨 Florencia</span>
+      <span class="cal-ev ev-ven" style="padding:3px 8px;font-size:10px;border-radius:4px">🚤 Venecia</span>
+      <span class="cal-ev ev-rom" style="padding:3px 8px;font-size:10px;border-radius:4px">🏛️ Roma</span>
+      <span class="cal-ev ev-sp" style="padding:3px 8px;font-size:10px;border-radius:4px">⭐ Especial</span>
+      <span class="cal-ev ev-fl" style="padding:3px 8px;font-size:10px;border-radius:4px">✈️ Vuelo</span>
+      <span class="cal-ev ev-hot" style="padding:3px 8px;font-size:10px;border-radius:4px">💕 Noche Mai</span>
+    </div>
+  </div>
+</div>
+
+<!-- TAREAS ANDRÉS -->
+<div id="tareas-a" class="sec">
+  <div class="task-phdr">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="p-av av-a">AR</div>
+      <div class="p-name">Andrés Reyes</div>
+    </div>
+    <button class="add-btn" onclick="showAdd('a')">+ Nueva tarea</button>
+  </div>
+  <div id="add-a" style="display:none;margin-bottom:8px">
+    <div class="t-input-row">
+      <input class="t-input" id="ti-a" placeholder="Nueva tarea..." onkeydown="if(event.key==='Enter')addTask('a')">
+      <select class="t-sel" id="tb-a"><option value="now">HOY</option><option value="week">Esta semana</option><option value="bef">Antes de viajar</option></select>
+      <button class="t-add" onclick="addTask('a')">+</button>
+    </div>
+  </div>
+  <div id="tasks-a"></div>
+</div>
+
+<!-- TAREAS MAILYN -->
+<div id="tareas-m" class="sec">
+  <div class="task-phdr">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="p-av av-m">MG</div>
+      <div class="p-name">Mailyn Castro</div>
+    </div>
+    <button class="add-btn" onclick="showAdd('m')">+ Nueva tarea</button>
+  </div>
+  <div id="add-m" style="display:none;margin-bottom:8px">
+    <div class="t-input-row">
+      <input class="t-input" id="ti-m" placeholder="Nueva tarea..." onkeydown="if(event.key==='Enter')addTask('m')">
+      <select class="t-sel" id="tb-m"><option value="now">HOY</option><option value="week">Esta semana</option><option value="bef">Antes de viajar</option></select>
+      <button class="t-add" onclick="addTask('m')">+</button>
+    </div>
+  </div>
+  <div id="tasks-m"></div>
+
+  <div class="special-task">
+    <div class="special-task-hdr">
+      <span class="s-emoji">💑</span>
+      <span class="s-txt">Recordatorio especial de cada noche — Mailyn</span>
+      <button class="s-btn" id="naughty-btn" onclick="handleNaughty()">¿Sucedió esta noche? 😏</button>
+    </div>
+    <div class="s-msg" id="naughty-msg"></div>
+  </div>
+</div>
+
+<!-- TRANSPORTE -->
+<div id="transporte" class="sec">
+  <div class="sec-title">Vuelos</div>
+  <div class="card">
+    <div class="tr-row"><div class="tr-ico ipl">✈️</div><div class="tr-info"><div class="tr-route">Bogotá → Atlanta → Barcelona</div><div class="tr-det">2 mayo · Air France · 7:00 AM · Escala 6h · Llega 12:50</div></div><div><button class="sbadge sb-ok" id="sb-tr-vbog" onclick="cycleSB('tr-vbog',event)">✈️ Comprado ✓ <small>↺</small></button></div></div>
+    <div class="tr-row"><div class="tr-ico ipl">✈️</div><div class="tr-info"><div class="tr-route">Barcelona → Catania</div><div class="tr-det">6 mayo · Vueling · 17:00 → 19:10</div></div><div><button class="sbadge sb-ok" id="sb-tr-vbcn" onclick="cycleSB('tr-vbcn',event)">✈️ Comprado ✓ <small>↺</small></button></div></div>
+    <div class="tr-row"><div class="tr-ico ipl">✈️</div><div class="tr-info"><div class="tr-route">Catania → Nápoles</div><div class="tr-det">10 mayo · Ryanair o easyJet · 1h15 directo · <a href="https://www.ryanair.com" target="_blank">ryanair.com ↗</a> · desde €15</div></div><div><button class="sbadge sb-urg" id="sb-tr-vcat" onclick="cycleSB('tr-vcat',event)">✈️ Comprar HOY <small>↺</small></button></div></div>
+    <div class="tr-row"><div class="tr-ico ipl">✈️</div><div class="tr-info"><div class="tr-route">Roma → París → Bogotá</div><div class="tr-det">22 mayo · Air France · 17:40 · Escala 24h París · <a href="https://www.airfrance.com" target="_blank">airfrance.com ↗</a></div></div><div><button class="sbadge sb-ok" id="sb-tr-vrom" onclick="cycleSB('tr-vrom',event)">✈️ Comprado ✓ <small>↺</small></button></div></div>
+  </div>
+  <div class="sec-title">🇫🇷 París — 24h escala de regreso</div>
+  <div class="card">
+    <div class="tr-row"><div class="tr-ico itr">🚆</div><div class="tr-info"><div class="tr-route">CDG → Centro París</div><div class="tr-det">RER B · 35 min · €11 · <a href="https://maps.google.com/?q=Paris+CDG+airport" target="_blank">📍 CDG</a></div></div><div class="tr-r"><span class="cbadge bpend">Plan</span></div></div>
+    <div class="hr-row" style="padding:8px 0;border-bottom:1px solid var(--border)"><div class="hrtime">Mañana</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Torre Eiffel + Trocadero</div><div class="hrdesc">Gratis verla desde afuera · <a href="https://maps.google.com/?q=Eiffel+Tower+Paris" target="_blank">📍</a></div></div></div>
+    <div class="hr-row" style="padding:8px 0;border-bottom:1px solid var(--border)"><div class="hrtime">Mediodía</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Notre Dame + Le Marais</div><div class="hrdesc">Reabrió en 2024 · <a href="https://maps.google.com/?q=Notre+Dame+Cathedral+Paris" target="_blank">📍</a></div></div></div>
+    <div class="hr-row" style="padding:8px 0;border-bottom:1px solid var(--border)"><div class="hrtime">Tarde</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Montmartre + Sacré-Cœur</div><div class="hrdesc">Gratis · Mejor vista de París · <a href="https://maps.google.com/?q=Sacre+Coeur+Montmartre+Paris" target="_blank">📍</a></div></div></div>
+    <div class="hr-row" style="padding:8px 0;border-bottom:1px solid var(--border)"><div class="hrtime">Noche</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Crucero por el Sena</div><div class="hrdesc">~€15/p · <a href="https://www.bateauxparisiens.com" target="_blank">bateauxparisiens.com ↗</a></div></div></div>
+    <div class="hr-row" style="padding:8px 0"><div class="hrtime">Madrugada</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Volver CDG con 3h de anticipación</div><div class="hrdesc">RER B desde cualquier estación central</div></div></div>
+  </div>
+  <div class="sec-title">Trenes Italia</div>
+  <div class="card">
+    <div class="tr-row"><div class="tr-ico ibus">🚌</div><div class="tr-info"><div class="tr-route">Nápoles → Sorrento</div><div class="tr-det">11 mayo · Circumvesuviana 70 min · €3.50 · <a href="https://www.eavsrl.it" target="_blank">eavsrl.it ↗</a></div></div><div><button class="sbadge sb-pend" id="sb-tr-tnap" onclick="cycleSB('tr-tnap',event)">🚂 Pendiente <small>↺</small></button></div></div>
+    <div class="tr-row"><div class="tr-ico itr">🚂</div><div class="tr-info"><div class="tr-route">Sorrento → Florencia</div><div class="tr-det">13 mayo · Alta velocidad · <a href="https://www.italotreno.com" target="_blank">italotreno.com ↗</a></div></div><div><button class="sbadge sb-pend" id="sb-tr-tnap2" onclick="cycleSB('tr-tnap2',event)">🚂 Pendiente <small>↺</small></button></div></div>
+    <div class="tr-row"><div class="tr-ico itr">🚂</div><div class="tr-info"><div class="tr-route">Florencia → Venecia</div><div class="tr-det">16 mayo · 2h15 · <a href="https://www.italotreno.com" target="_blank">italotreno.com ↗</a></div></div><div><button class="sbadge sb-pend" id="sb-tr-tflo" onclick="cycleSB('tr-tflo',event)">🚂 Pendiente <small>↺</small></button></div></div>
+    <div class="tr-row"><div class="tr-ico itr">🚂</div><div class="tr-info"><div class="tr-route">Venecia → Roma</div><div class="tr-det">18 mayo · 3h40 · <a href="https://www.italotreno.com" target="_blank">italotreno.com ↗</a></div></div><div><button class="sbadge sb-pend" id="sb-tr-tven" onclick="cycleSB('tr-tven',event)">🚂 Pendiente <small>↺</small></button></div></div>
+  </div>
+</div>
+
+<!-- PRESUPUESTO -->
+<div id="presupuesto" class="sec">
+  <div class="bg-grid">
+    <div class="mini"><div class="ml">Total</div><div class="mv">€5.465</div><div class="ms">19M COP + €1.000</div></div>
+    <div class="mini"><div class="ml">Pagado</div><div class="mv" style="color:#3B6D11">€615</div><div class="ms">Hotel BCN</div></div>
+    <div class="mini"><div class="ml">Estimado</div><div class="mv">€4.880</div><div class="ms">Plan actual</div></div>
+    <div class="mini"><div class="ml">Colchón</div><div class="mv" style="color:#3B6D11">€585</div><div class="ms">Imprevistos</div></div>
+  </div>
+  <div class="sec-title">Distribución del gasto</div>
+  <div class="card">
+    <div class="bg-row"><div class="bg-cat">Hoteles 20 noches</div><div class="bg-bar-w"><div class="bg-bar" style="width:60%;background:#185FA5"></div></div><div class="bg-amt">€2.400</div></div>
+    <div class="bg-row"><div class="bg-cat">Comidas 20 días</div><div class="bg-bar-w"><div class="bg-bar" style="width:35%;background:#1D9E75"></div></div><div class="bg-amt">€1.400</div></div>
+    <div class="bg-row"><div class="bg-cat">Trenes Italia</div><div class="bg-bar-w"><div class="bg-bar" style="width:16%;background:#D85A30"></div></div><div class="bg-amt">€380</div></div>
+    <div class="bg-row"><div class="bg-cat">Entradas museos</div><div class="bg-bar-w"><div class="bg-bar" style="width:12%;background:#BA7517"></div></div><div class="bg-amt">€300</div></div>
+    <div class="bg-row"><div class="bg-cat">Transporte local</div><div class="bg-bar-w"><div class="bg-bar" style="width:8%;background:#534AB7"></div></div><div class="bg-amt">€200</div></div>
+    <div class="bg-row"><div class="bg-cat">Compras e imprevistos</div><div class="bg-bar-w"><div class="bg-bar" style="width:10%;background:#888780"></div></div><div class="bg-amt">€500</div></div>
+    <div class="bg-row" style="border-top:1px solid var(--border);padding-top:9px;margin-top:4px"><div class="bg-cat" style="font-weight:700">Total estimado</div><div class="bg-bar-w"></div><div class="bg-amt" style="font-weight:700">€4.880</div></div>
+  </div>
+  <div class="sec-title">Tarjetas</div>
+  <div class="card">
+    <div class="row"><span class="rl">Principal</span><span class="rv"><a href="https://littio.co" target="_blank">Littio Card ↗</a> · Sin comisiones · Para todo</span></div>
+    <div class="row"><span class="rl">Efectivo</span><span class="rv">€500 · Propinas, mercados, emergencias</span></div>
+    <div class="row"><span class="rl">Tasa EUR</span><span class="rv">€1 = $4.257 COP · <a href="https://www.xe.com" target="_blank">XE.com ↗</a></span></div>
+  </div>
+</div>
+
+<!-- MALETA -->
+<div id="maleta" class="sec">
+  <div class="abox a-blue"><div class="atxt2"><span class="at">Recomendación</span>1 maleta cabina (55x35x25cm máx 10kg) + 1 morral día 25L por persona. Sin bodega = sin cargos en vuelos internos.</div></div>
+  <div class="sec-title">Ropa — Mailyn Castro</div>
+  <div class="cl-grid">
+    <div class="cl-item"><div class="cl-cat">Superior</div><p>5 tops ligeros<br>2 blusas<br>1 top boda<br>1 chaqueta<br>1 impermeable</p></div>
+    <div class="cl-item"><div class="cl-cat">Inferior</div><p>2 pantalones<br>1 falda<br>1 vestido boda<br>1 short</p></div>
+    <div class="cl-item"><div class="cl-cat">Interior</div><p>7 interiores<br>7 medias<br>1 pijama<br>2 sostenes</p></div>
+    <div class="cl-item"><div class="cl-cat">Zapatos</div><p>1 par caminar<br>1 par boda<br>1 sandalia</p></div>
+    <div class="cl-item"><div class="cl-cat">Accesorios</div><p>Gafas sol<br>Sombrero<br>Bolso boda<br>Bisutería</p></div>
+    <div class="cl-item"><div class="cl-cat">Neceser</div><p>Maquillaje<br>SPF hidratante<br>Shampoo barra<br>Desodorante</p></div>
+  </div>
+  <div class="sec-title">Ropa — Andrés Reyes</div>
+  <div class="cl-grid">
+    <div class="cl-item"><div class="cl-cat">Superior</div><p>5 camisetas<br>2 camisas<br>1 camisa boda<br>1 chaqueta<br>1 impermeable</p></div>
+    <div class="cl-item"><div class="cl-cat">Inferior</div><p>2 pantalones<br>1 pantalón boda<br>1 short</p></div>
+    <div class="cl-item"><div class="cl-cat">Interior</div><p>7 interiores<br>7 medias<br>1 pijama</p></div>
+    <div class="cl-item"><div class="cl-cat">Zapatos</div><p>1 zapatillas<br>1 zapato boda<br>1 sandalia</p></div>
+    <div class="cl-item"><div class="cl-cat">Accesorios</div><p>Gafas sol<br>Cinturón</p></div>
+    <div class="cl-item"><div class="cl-cat">Neceser</div><p>Afeitadora<br>Desodorante<br>SPF facial</p></div>
+  </div>
+  <div class="sec-title">Esenciales</div>
+  <div class="card">
+    <div class="row"><span class="rl">Documentos</span><span class="rv">Pasaportes · Seguro · Confirmaciones · Foto digital</span></div>
+    <div class="row"><span class="rl">Tecnología</span><span class="rv">Celulares · Cargadores · Power bank · Adaptador tipo F</span></div>
+    <div class="row"><span class="rl">Vuelo</span><span class="rv">Almohada cuello · Antifaz · Tapones · Medias compresión</span></div>
+    <div class="row"><span class="rl">Salud</span><span class="rv">Medicamentos · Antigripal · Analgésico · Antidiarreico</span></div>
+    <div class="row"><span class="rl">Vaticano</span><span class="rv">Ropa cubre hombros y rodillas — obligatorio entrar</span></div>
+  </div>
+</div>
+
+<!-- TIPS -->
+<div id="tips" class="sec">
+  <div class="sec-title">Apps esenciales — instalar ya</div>
+  <div class="card">
+    <div class="row"><span class="rl">Dinero</span><span class="rv"><a href="https://littio.co" target="_blank">Littio ↗</a> · <a href="https://www.xe.com" target="_blank">XE Currency ↗</a></span></div>
+    <div class="row"><span class="rl">Trenes IT</span><span class="rv"><a href="https://www.trenitalia.com" target="_blank">Trenitalia ↗</a> · <a href="https://www.italotreno.com" target="_blank">Italo ↗</a> · <a href="https://www.omio.com" target="_blank">Omio ↗</a></span></div>
+    <div class="row"><span class="rl">Mapas</span><span class="rv">Google Maps · Descargar offline cada ciudad</span></div>
+    <div class="row"><span class="rl">Traducción</span><span class="rv">Google Translate · Italiano offline</span></div>
+    <div class="row"><span class="rl">Asientos vuelo</span><span class="rv"><a href="https://www.seatguru.com" target="_blank">SeatGuru ↗</a></span></div>
+    <div class="row"><span class="rl">Hoteles</span><span class="rv"><a href="https://www.booking.com" target="_blank">Booking.com ↗</a></span></div>
+  </div>
+  <div class="sec-title">Links directos — entradas</div>
+  <div class="card">
+    <div class="row"><span class="rl">Sagrada Família</span><span class="rv"><a href="https://sagradafamilia.org/es/visites" target="_blank">sagradafamilia.org ↗</a> · €26/p</span></div>
+    <div class="row"><span class="rl">Park Güell</span><span class="rv"><a href="https://www.parkguell.barcelona/es/comprar-entrades" target="_blank">parkguell.barcelona ↗</a> · €10/p</span></div>
+    <div class="row"><span class="rl">Vaticano</span><span class="rv"><a href="https://www.museivaticani.va" target="_blank">museivaticani.va ↗</a> · €20/p</span></div>
+    <div class="row"><span class="rl">Coliseo</span><span class="rv"><a href="https://www.coopculture.it" target="_blank">coopculture.it ↗</a> · €18/p</span></div>
+    <div class="row"><span class="rl">Accademia FLO</span><span class="rv"><a href="https://www.galleriaaccademiafirenze.it" target="_blank">galleriaaccademiafirenze.it ↗</a> · €20/p</span></div>
+    <div class="row"><span class="rl">Uffizi</span><span class="rv"><a href="https://www.uffizi.it" target="_blank">uffizi.it ↗</a> · €25/p</span></div>
+    <div class="row"><span class="rl">Pompeya</span><span class="rv"><a href="https://www.pompeionline.net" target="_blank">pompeionline.net ↗</a> · €18/p</span></div>
+    <div class="row"><span class="rl">Palacio Ducal</span><span class="rv"><a href="https://palazzoducale.visitmuve.it" target="_blank">palazzoducale.visitmuve.it ↗</a> · €25/p</span></div>
+  </div>
+  <div class="sec-title">Gastronomía obligatoria</div>
+  <div class="tip-b"><p><strong>Barcelona:</strong> Pa amb tomàquet · Tapas El Born · Vermut en Gràcia</p></div>
+  <div class="tip-b"><p><strong>Sicilia:</strong> Pasta alla Norma · Arancini · Granita con brioche · Chocolate de Módica</p></div>
+  <div class="tip-b"><p><strong>Sorrento:</strong> Pizza napolitana DOC · Limoncello · Sfogliatella</p></div>
+  <div class="tip-b"><p><strong>Florencia:</strong> Bistecca alla Fiorentina · Gelato artigianale · Ribollita</p></div>
+  <div class="tip-b"><p><strong>Venecia:</strong> Cicchetti €1-2 · Baccalà mantecato · Fritto misto</p></div>
+  <div class="tip-b"><p><strong>Roma:</strong> Cacio e Pepe · Carbonara · Supplì · Agua gratis de nasoni</p></div>
+  <div class="sec-title">Emergencias</div>
+  <div class="card">
+    <div class="row"><span class="rl">Europa</span><span class="rv">112 — funciona en todos los países sin señal</span></div>
+    <div class="row"><span class="rl">Embajada</span><span class="rv">Roma: +39 06 3608 2801</span></div>
+    <div class="row"><span class="rl">Air France</span><span class="rv"><a href="https://www.airfrance.com" target="_blank">airfrance.com ↗</a></span></div>
+    <div class="row"><span class="rl">Littio</span><span class="rv"><a href="https://littio.co" target="_blank">App Littio ↗</a></span></div>
+  </div>
+</div>
+
+<div class="footer">Andrés Reyes & Mailyn Castro · Europa 2026 · Hecho con ❤️</div>
+</div>
+
+<!-- CELEBRATION -->
+<div class="cel-overlay hid" id="celebration" onclick="hideCel()">
+  <div class="conf-wrap" id="conf-wrap"></div>
+  <div class="cel-box" onclick="event.stopPropagation()">
+    <span class="cel-emoji" id="cel-emoji">🎉</span>
+    <div class="cel-text" id="cel-text">¡Ciudad completada!</div>
+    <div class="cel-sub" id="cel-sub">El viaje va tomando forma</div>
+    <button class="cel-close" onclick="hideCel()">Cerrar</button>
+  </div>
+</div>
+
+<!-- NAUGHTY OVERLAY -->
+<div class="naughty-overlay hid" id="naughty-overlay">
+  <div class="naughty-box">
+    <span class="n-emoji" id="n-emoji">😏</span>
+    <div class="n-title">Mailyn — recordatorio de la noche</div>
+    <div class="n-msg" id="n-msg">Andrés está esperando...<br>¿Se cumplió el plan esta noche?</div>
+    <div class="n-btns">
+      <button class="n-btn n-btn-yes" onclick="naughtyAnswer(true)">💕 ¡Claro que sí!</button>
+      <button class="n-btn n-btn-no" onclick="naughtyAnswer(false)">😴 Esta noche no</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// STORAGE
+const S={
+  get(k){try{return JSON.parse(localStorage.getItem('eu26_'+k))}catch{return null}},
+  set(k,v){try{localStorage.setItem('eu26_'+k,JSON.stringify(v))}catch{}}
+};
+
+// COUNTDOWN
+function updateCountdown(){
+  const t=new Date('2026-05-02T07:00:00-05:00');
+  const d=Math.ceil((t-new Date())/(1000*60*60*24));
+  const el=document.getElementById('countdown');
+  const de=document.getElementById('days-el');
+  if(d>0){if(el)el.textContent=d+' días';if(de)de.textContent=d;}
+  else if(d===0){if(el)el.textContent='¡HOY!';}
+  else{if(el)el.textContent='¡En Europa!';}
+}
+updateCountdown();
+
+// TABS
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===================== STATUS BADGE =====================
+// 0=pendiente, 1=ok(reservado/comprado), 2=cancelado
+const SB_LABELS={
+  'hotel-bcn':['🏨 Hotel pendiente','🏨 Hotel ✓','🏨 Hotel cancelado ✗'],
+  'hotel-cat':['🏨 Pendiente','🏨 Hotel ✓','🏨 Hotel cancelado ✗'],
+  'hotel-sor':['🏨 Pendiente','🏨 Hotel ✓','🏨 Hotel cancelado ✗'],
+  'hotel-flo':['🏨 Pendiente','🏨 Hotel ✓','🏨 Hotel cancelado ✗'],
+  'hotel-ven':['🏨 Reservar HOY','🏨 Hotel ✓','🏨 Hotel cancelado ✗'],
+  'hotel-rom':['🏨 Reservar HOY','🏨 Hotel ✓','🏨 Hotel cancelado ✗'],
+  'hotel-par':['🏨 Escala','🏨 Escala ✓','🏨 Sin hotel escala'],
+  'tr-vbog':['✈️ Vuelo pendiente','✈️ Comprado ✓','✈️ Vuelo cancelado'],
+  'tr-vbcn':['✈️ Vuelo pendiente','✈️ Comprado ✓','✈️ Vuelo cancelado'],
+  'tr-vcat':['✈️ Comprar HOY','✈️ CTA-NAP ✓','✈️ Sin vuelo'],
+  'tr-vrom':['✈️ Vuelo pendiente','✈️ Comprado ✓','✈️ Vuelo cancelado'],
+  'tr-tnap':['🚌 Pendiente','🚌 Comprado ✓','🚌 Sin tren'],
+  'tr-tnap2':['🚂 Pendiente','🚂 Comprado ✓','🚂 Sin tren'],
+  'tr-tflo':['🚂 Pendiente','🚂 Comprado ✓','🚂 Sin tren'],
+  'tr-tven':['🚂 Pendiente','🚂 Comprado ✓','🚂 Sin tren'],
+};
+const SB_INIT_OK=['hotel-bcn','tr-vbog','tr-vbcn','tr-vrom'];
+const SB_URGENT=['hotel-ven','hotel-rom','tr-vcat'];
+
+function cycleSB(id,e){
+  if(e)e.stopPropagation();
+  const el=document.getElementById('sb-'+id);if(!el)return;
+  let cur=S.get('sb-'+id);
+  if(cur===null)cur=SB_INIT_OK.includes(id)?1:0;
+  const next=(cur+1)%3;
+  S.set('sb-'+id,next);
+  renderSB(id,next);
+  updatePct();
+  if(next===1)showCel('sb',id);
+}
+
+function renderSB(id,state){
+  const el=document.getElementById('sb-'+id);if(!el)return;
+  const labels=SB_LABELS[id];
+  const txt=(labels&&labels[state]!=null?labels[state]:id)+' <small>↺</small>';
+  let cls='sb-pend';
+  if(state===1)cls='sb-ok';
+  else if(state===2)cls='sb-cancel';
+  else if(SB_URGENT.includes(id))cls='sb-urg';
+  el.className='sbadge '+cls;
+  el.innerHTML=txt;
+}
+
+function initAllSB(){
+  Object.keys(SB_LABELS).forEach(id=>{
+    const state=S.get('sb-'+id)!=null?S.get('sb-'+id):(SB_INIT_OK.includes(id)?1:0);
+    renderSB(id,state);
+  });
+}
+initAllSB();
+
+function updatePct(){
+  const total=Object.keys(SB_LABELS).length;
+  const done=Object.keys(SB_LABELS).filter(id=>{
+    const s=S.get('sb-'+id);
+    return s===1||(s===null&&SB_INIT_OK.includes(id));
+  }).length;
+  const el=document.getElementById('pct-el');
+  if(el)el.textContent=Math.round(done/total*100)+'%';
+}
+updatePct();
+
+// CITIES timeline dots
+const cityEmojis={bcn:'🇪🇸',cat:'🌋',sor:'🌊',flo:'🎨',ven:'🚤',rom:'🏛️',par:'🇫🇷'};
+const cityNames={bcn:'Barcelona',cat:'Catania',sor:'Sorrento',flo:'Florencia',ven:'Venecia',rom:'Roma',par:'París'};
+
+function toggleCityVisit(id){
+  const newVal=!(S.get('city-'+id)||false);
+  S.set('city-'+id,newVal);
+  updateTL();
+  if(newVal)showCel('city',id);
+}
+function updateTL(){
+  ['bcn','cat','sor','flo','ven','rom','par'].forEach((c,i)=>{
+    const dot=document.getElementById('dot-'+c);
+    const line=document.getElementById('line-'+(i+1));
+    const v=S.get('city-'+c)||false;
+    if(dot)dot.className='tl-dot '+(v?'done':'pending');
+    if(line)line.className='tl-line '+(v?'done':'pending');
+  });
+}
+updateTL();
+
+// CITY CARDS — abrir
+function toggleCity(id,e){
+  if(e)e.stopPropagation();
+  const body=document.getElementById('body-'+id);
+  const chev=document.getElementById('chev-'+id);
+  if(!body)return;
+  const isOpen=!body.classList.contains('hid');
+  body.classList.toggle('hid',isOpen);
+  if(chev)chev.classList.toggle('open',!isOpen);
+}
+
+// COMPLETE CITY
+function completeCity(id,e){
+  if(e)e.stopPropagation();
+  const btn=document.getElementById('btn-'+id);
+  const card=document.getElementById('card-'+id);
+  const newDone=!(S.get('done-city-'+id)||false);
+  S.set('done-city-'+id,newDone);
+  if(btn){btn.className=newDone?'comp-btn done':'comp-btn';btn.textContent=newDone?'✓ Visitada':'✓ Listo';}
+  if(card)card.classList.toggle('completed',newDone);
+  if(newDone)showCel('city',id);
+}
+function initCityDone(){
+  ['bcn','cat','sor','flo','ven','rom','par'].forEach(id=>{
+    if(S.get('done-city-'+id)){
+      const btn=document.getElementById('btn-'+id);
+      const card=document.getElementById('card-'+id);
+      if(btn){btn.className='comp-btn done';btn.textContent='✓ Visitada';}
+      if(card)card.classList.add('completed');
+    }
+  });
+}
+initCityDone();
+
+function showCityTab(city,panel,btn){
+  const body=document.getElementById('body-'+city);
+  if(body){body.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('active'));}
+  btn.closest('.ctabs').querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  const el=document.getElementById(city+'-'+panel);
+  if(el)el.classList.add('active');
+  btn.classList.add('active');
+  if(event)event.stopPropagation();
+}
+
+// RATING
+function rate(btn,key){
+  btn.parentElement.querySelectorAll('.face-btn').forEach((b,i)=>{
+    b.classList.remove('sel');
+    if(b===btn){b.classList.add('sel');S.set('rate-'+key,i);}
+  });
+}
+function initRatings(){
+  document.querySelectorAll('.face-btn').forEach(btn=>{
+    const fn=btn.getAttribute('onclick');if(!fn)return;
+    const m=fn.match(/rate\(this,'(.+?)'\)/);if(!m)return;
+    const saved=S.get('rate-'+m[1]);
+    if(saved!==null){
+      const sibs=btn.parentElement.querySelectorAll('.face-btn');
+      if(sibs[saved])sibs[saved].classList.add('sel');
+    }
+  });
+}
+initRatings();
+
+// CELEBRATION
+function showCel(type,id){
+  let emoji='🎉',text='¡Listo!',sub='';
+  if(type==='city'){
+    emoji=cityEmojis[id]||'🎉';
+    text='¡'+(cityNames[id]||id)+' visitada!';
+    const done=['bcn','cat','sor','flo','ven','rom','par'].filter(c=>S.get('city-'+c)).length;
+    sub=done+' de 7 destinos — ¡van de lujo AR & MG!';
+  }else if(type==='sb'){
+    text='¡Reserva confirmada!';
+    sub='Sigue así — el viaje se está armando ✈️';
+  }
+  document.getElementById('cel-emoji').textContent=emoji;
+  document.getElementById('cel-text').textContent=text;
+  document.getElementById('cel-sub').textContent=sub;
+  document.getElementById('celebration').classList.remove('hid');
+  makeConfetti();
+  setTimeout(hideCel,3000);
+}
+function hideCel(){
+  document.getElementById('celebration').classList.add('hid');
+  document.getElementById('conf-wrap').innerHTML='';
+}
+function makeConfetti(){
+  const w=document.getElementById('conf-wrap');w.innerHTML='';
+  const cols=['#185FA5','#1D9E75','#D85A30','#534AB7','#EF9F27','#D4537E'];
+  for(let i=0;i<55;i++){
+    const el=document.createElement('div');el.className='conf';
+    el.style.cssText='position:absolute;left:'+Math.random()*100+'%;top:-15px;background:'+cols[~~(Math.random()*cols.length)]+';width:'+(Math.random()*9+3)+'px;height:'+(Math.random()*9+3)+'px;border-radius:'+(Math.random()>.5?'50%':'2px')+';animation:fall '+(Math.random()*2+1.5)+'s '+(Math.random()*0.6)+'s linear forwards';
+    w.appendChild(el);
+  }
+}
+
+// NAUGHTY
+let nAnswered=S.get('naughty')||false;
+if(nAnswered){
+  const btn=document.getElementById('naughty-btn');
+  if(btn){btn.textContent='💕 Cumplido';btn.style.cssText='background:linear-gradient(135deg,#27500A,#1D9E75);color:white;border-radius:20px;border:none;padding:6px 13px;font-size:11px;font-weight:700';}
+}
+function handleNaughty(){if(!nAnswered)document.getElementById('naughty-overlay').classList.remove('hid');}
+function naughtyAnswer(yes){
+  document.getElementById('naughty-overlay').classList.add('hid');
+  nAnswered=true;S.set('naughty',true);
+  const btn=document.getElementById('naughty-btn');
+  const msg=document.getElementById('naughty-msg');
+  if(yes){
+    btn.textContent='💕 Cumplido';
+    btn.style.cssText='background:linear-gradient(135deg,#27500A,#1D9E75);color:white;border-radius:20px;border:none;padding:6px 13px;font-size:11px;font-weight:700';
+    msg.style.color='#3B6D11';
+    msg.textContent='🌹 ¡Qué pareja tan linda! Con todo Europa se ve más bonita. 💕';
+    msg.classList.add('show');
+  }else{
+    btn.textContent='😴 Mañana más';
+    msg.style.color='#A32D2D';
+    msg.textContent='Mailyn... si quieres saber qué le pasa a Andrés mañana, revisa tus compromisos pendientes 😏';
+    msg.classList.add('show');
+    setTimeout(()=>{nAnswered=false;S.set('naughty',false);btn.textContent='¿Sucedió? 😏';btn.removeAttribute('style');},86400000);
+  }
+}
+
+// MAP
+function mapClick(city,info){
+  document.getElementById('map-city-name').textContent=city;
+  document.getElementById('map-city-info').textContent=info;
+  document.getElementById('map-info').style.display='block';
+  document.getElementById('map-info').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// CALENDAR
+let cMonth=4,cYear=2026;
+const cEvs={
+  '2026-05-02':['ev-fl','✈️ Vuelo BOG→BCN','Air France 7:00 AM · Atlanta escala 6h · Llegan Barcelona 12:50'],
+  '2026-05-03':['ev-bcn','🇪🇸 Llegada BCN','Taxi hotel Booking Genius gratis · Barrio Gótico de tarde · Cena Barceloneta'],
+  '2026-05-04':['ev-bcn','⛪ Sagrada Família + Park Güell','8:00 Sagrada €26/p · 10:30 Passeig de Gràcia · 15:00 Park Güell €10/p · Cena El Born'],
+  '2026-05-05':['ev-bcn','🌅 Bunkers del Carmel','7:00 Bunkers amanecer gratis · 10:00 Sant Pau €15/p · 21:00 Fuente Mágica gratis'],
+  '2026-05-06':['ev-fl','✈️ BCN→CTA Catania','Salir hotel 13:00 · Vueling 17:00 → 19:10 · Taxi fijo €15-20'],
+  '2026-05-07':['ev-cat','🌋 Etna + Pescheria','7:30 Mercado Pescheria (cierra 9AM) · 10:00 Excursión Etna jeep €30-50/p'],
+  '2026-05-08':['ev-sp','💒 Boda en Taormina','Bus Interbus 9AM · Teatro Greco · Ropa ligera de gala'],
+  '2026-05-09':['ev-cat','🏛 Noto · Piazza del Duomo','Catania · Noto barroco UNESCO · Cena Pasta alla Norma'],
+  '2026-05-10':['ev-fl','✈️ CTA→NAP Nápoles','Ryanair directo 1h15 · desde €15 · Llegan Nápoles'],
+  '2026-05-11':['ev-sor','🌊 Llegada Sorrento','Circumvesuviana 70 min €3.50 · Check-in hotel'],
+  '2026-05-12':['ev-sp','🏛 Pompeya UNESCO','Tren 30 min · Pompeya €18/p · ¡Imperdible!'],
+  '2026-05-13':['ev-sor','⛵ Capri o Positano','Ferry Capri €20 · O bus SITA Positano €2 · Salida a Florencia'],
+  '2026-05-14':['ev-flo','🎨 Llegada Florencia','Tren alta velocidad · Hotel · Piazzale Michelangelo al atardecer'],
+  '2026-05-15':['ev-flo','🗿 El David + Uffizi','Accademia €20/p · Uffizi €25/p · Bistecca alla Fiorentina'],
+  '2026-05-16':['ev-ven','🚤 Llegada Venecia','Tren 2h15 · Vaporetto · San Marcos · Librería Acqua Alta'],
+  '2026-05-17':['ev-ven','🌈 Burano + Palacio Ducal','Ferry Burano antes 9AM · Palacio Ducal €25/p · Cicchetti'],
+  '2026-05-18':['ev-rom','🏛️ Llegada Roma','Tren 3h40 · Hotel Roma · Coliseo €18/p · Trastevere de noche'],
+  '2026-05-19':['ev-rom','⛪ Vaticano + Sixtina','Vaticano €20/p · Fontana Trevi (ir 7AM)'],
+  '2026-05-20':['ev-rom','⛲ Trevi · Navona · Panteón','Fontana Trevi 7AM · Piazza Navona · Panteón · Aventino hueco Caballeros de Malta'],
+  '2026-05-21':['ev-rom','🔑 Aventino · Trastevere','Día libre Roma · Trastevere de noche · Cacio e Pepe · Última noche Italia'],
+  '2026-05-22':['ev-fl','✈️ Roma→París escala 24h','Salir hotel 13:30 · Leonardo Express 35 min · Vuelo AF 17:40'],
+  '2026-05-23':['ev-sp','🇫🇷 París → Bogotá','Torre Eiffel · Montmartre · Crucero Sena · Vuelo regreso Bogotá']
+};
+const months=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function renderCal(){
+  document.getElementById('cal-title').textContent=months[cMonth]+' '+cYear;
+  const c=document.getElementById('cal-days');c.innerHTML='';
+  const first=new Date(cYear,cMonth,1).getDay();
+  const start=first===0?6:first-1;
+  const dim=new Date(cYear,cMonth+1,0).getDate();
+  const prev=new Date(cYear,cMonth,0).getDate();
+  const today=new Date();
+  for(let i=0;i<start;i++){const d=document.createElement('div');d.className='cal-day om';d.innerHTML='<div class="dnum">'+(prev-start+i+1)+'</div>';c.appendChild(d);}
+  for(let i=1;i<=dim;i++){
+    const d=document.createElement('div');
+    const ds=cYear+'-'+(cMonth+1).toString().padStart(2,'0')+'-'+i.toString().padStart(2,'0');
+    const isToday=today.getFullYear()===cYear&&today.getMonth()===cMonth&&today.getDate()===i;
+    d.className='cal-day'+(isToday?' today':'');
+    let h='<div class="dnum">'+i+'</div>';
+    if(cEvs[ds]){h+='<span class="cal-ev '+cEvs[ds][0]+'">'+cEvs[ds][1]+'</span>';d.style.cursor='pointer';d.onclick=()=>showDayDetail(ds,i);}
+    d.innerHTML=h;c.appendChild(d);
+  }
+  const rem=42-start-dim;
+  for(let i=1;i<=Math.min(rem,14);i++){const d=document.createElement('div');d.className='cal-day om';d.innerHTML='<div class="dnum">'+i+'</div>';c.appendChild(d);}
+}
+
+function showDayDetail(ds,dia){
+  const ev=cEvs[ds];if(!ev)return;
+  const box=document.getElementById('cal-detail-box');
+  const title=document.getElementById('cal-detail-title');
+  const body=document.getElementById('cal-detail-body');
+  if(!box)return;
+  if(title)title.textContent=dia+' de mayo — '+ev[1];
+  if(body)body.textContent=ev[2]||'';
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function changeMonth(dir){cMonth+=dir;if(cMonth<0){cMonth=11;cYear--;}if(cMonth>11){cMonth=0;cYear++;}renderCal();}
+renderCal();
+
+// TASKS
+const bm={now:'tbadge tb-now',week:'tbadge tb-week',bef:'tbadge tb-bef'};
+const bl={now:'HOY',week:'Esta semana',bef:'Antes de viajar'};
+
+const defaultTasksA=[
+  {id:1,text:'Comprar vuelo Catania→Nápoles 10 mayo — ryanair.com desde €15',badge:'now',done:false},
+  {id:2,text:'Reservar hotel Venecia 16-18 mayo — Booking.com',badge:'now',done:false},
+  {id:3,text:'Reservar Hotel Centro Cavour Roma 18-22 mayo',badge:'now',done:false},
+  {id:4,text:'Reservar Vaticano — museivaticani.va (semanas antes)',badge:'now',done:false},
+  {id:5,text:'Comprar tren Florencia→Venecia 16 mayo — italotreno.com',badge:'week',done:false},
+  {id:6,text:'Comprar tren Venecia→Roma 18 mayo — italotreno.com',badge:'week',done:false},
+  {id:7,text:'Reservar Coliseo — coopculture.it €18/p',badge:'bef',done:false},
+  {id:8,text:'Avisar a bancos fechas del viaje',badge:'bef',done:false}
+];
+const defaultTasksM=[
+  {id:1,text:'Reservar hotel Catania — B&B centro storico',badge:'now',done:false},
+  {id:2,text:'Reservar hotel Sorrento 11-13 mayo',badge:'now',done:false},
+  {id:3,text:'Reservar hotel Florencia 13-16 mayo',badge:'now',done:false},
+  {id:4,text:'Comprar tren Nápoles→Florencia 13 mayo — italotreno.com',badge:'week',done:false},
+  {id:5,text:'Reservar Sagrada Família — sagradafamilia.org €26/p',badge:'now',done:false},
+  {id:6,text:'Reservar Park Güell — parkguell.barcelona €10/p',badge:'now',done:false},
+  {id:7,text:'Reservar El David Accademia Florencia',badge:'bef',done:false},
+  {id:8,text:'Check-in online vuelos el 1 mayo',badge:'bef',done:false},
+  {id:9,text:'Arreglos para el gato antes de salir',badge:'bef',done:false},
+  {id:10,text:'Confirmar con Air France si escala París permite salir o es conexión directa',badge:'now',done:false}
+];
+
+let tasksA=S.get('tasks-a')||defaultTasksA;
+let tasksM=S.get('tasks-m')||defaultTasksM;
+
+function renderTasks(p){
+  const tasks=p==='a'?tasksA:tasksM;
+  const c=document.getElementById('tasks-'+p);if(!c)return;
+  c.innerHTML='';
+  tasks.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.className='task-item'+(t.done?' done':'');
+    const chkDiv=document.createElement('div');
+    chkDiv.className='chk'+(t.done?' done':'');
+    chkDiv.onclick=()=>toggleTask(p,i);
+    if(t.done)chkDiv.innerHTML='<span style="color:white;font-size:11px;font-weight:800">✓</span>';
+    const txtDiv=document.createElement('div');
+    txtDiv.className='chktxt'+(t.done?' done':'');
+    txtDiv.textContent=t.text;
+    const badge=document.createElement('span');
+    badge.className=t.done?'tbadge':bm[t.badge]||bm.now;
+    badge.textContent=t.done?'✓':bl[t.badge]||'HOY';
+    const del=document.createElement('span');
+    del.className='t-del';del.textContent='✕';
+    del.onclick=()=>delTask(p,i);
+    div.appendChild(chkDiv);div.appendChild(txtDiv);div.appendChild(badge);div.appendChild(del);
+    c.appendChild(div);
+  });
+}
+function toggleTask(p,i){const tasks=p==='a'?tasksA:tasksM;tasks[i].done=!tasks[i].done;S.set('tasks-'+p,tasks);renderTasks(p);}
+function delTask(p,i){const tasks=p==='a'?tasksA:tasksM;tasks.splice(i,1);S.set('tasks-'+p,tasks);renderTasks(p);}
+function showAdd(p){const el=document.getElementById('add-'+p);el.style.display=el.style.display==='none'?'block':'none';if(el.style.display==='block')document.getElementById('ti-'+p).focus();}
+function addTask(p){
+  const inp=document.getElementById('ti-'+p);const sel=document.getElementById('tb-'+p);
+  const txt=inp.value.trim();if(!txt)return;
+  const tasks=p==='a'?tasksA:tasksM;
+  tasks.push({id:Date.now(),text:txt,badge:sel.value,done:false});
+  S.set('tasks-'+p,tasks);inp.value='';
+  renderTasks(p);
+  document.getElementById('add-'+p).style.display='none';
+}
+renderTasks('a');renderTasks('m');
+
+// ===================== NOTAS EDITABLES =====================
+function saveNota(city){
+  const ta=document.getElementById('nota-'+city);
+  if(!ta)return;
+  S.set('nota-'+city,ta.value);
+  const saved=document.getElementById('nota-saved-'+city);
+  if(saved){saved.classList.add('show');setTimeout(()=>saved.classList.remove('show'),1500);}
+}
+function clearNota(city){
+  const ta=document.getElementById('nota-'+city);
+  if(ta)ta.value='';
+  S.set('nota-'+city,'');
+}
+function initNotas(){
+  ['bcn','cat','sor','flo','ven','rom','par'].forEach(city=>{
+    const ta=document.getElementById('nota-'+city);
+    if(ta){
+      const saved=S.get('nota-'+city);
+      if(saved)ta.value=saved;
+      ta.addEventListener('input',()=>saveNota(city));
+    }
+  });
+}
+initNotas();
+
+// ===================== PAGADO EDITABLE =====================
+function editPagado(){
+  const wrap=document.getElementById('pagado-wrap');
+  const inp=document.getElementById('pagado-inp');
+  const v=document.getElementById('pagado-v');
+  if(!wrap||!inp)return;
+  inp.value=v?v.textContent:'';
+  wrap.classList.add('show');
+  inp.focus();inp.select();
+}
+function savePagado(){
+  const wrap=document.getElementById('pagado-wrap');
+  const inp=document.getElementById('pagado-inp');
+  const v=document.getElementById('pagado-v');
+  const sub=document.getElementById('pagado-sub');
+  if(!inp||!v)return;
+  const val=inp.value.trim();
+  if(val){
+    v.textContent=val;
+    S.set('pagado-val',val);
+  }
+  if(wrap)wrap.classList.remove('show');
+}
+function initPagado(){
+  const saved=S.get('pagado-val');
+  const v=document.getElementById('pagado-v');
+  if(saved&&v)v.textContent=saved;
+}
+initPagado();
+
+</script>
+
+</body>
+</html>
