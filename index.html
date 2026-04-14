@@ -290,9 +290,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .stat-input-wrap.show{display:block}
 .stat-inp{width:100%;padding:4px 7px;border:1px solid var(--blue);border-radius:6px;font-size:13px;font-weight:800;background:var(--card);color:var(--text);text-align:center}
 .hdr-foto{width:58px;height:58px;border-radius:50%;border:2.5px solid rgba(255,255,255,0.8);object-fit:cover;object-position:center top;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+
+/* LOCK SCREEN */
+.lock-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#185FA5,#534AB7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.lock-box{background:white;border-radius:24px;padding:2rem 1.8rem;max-width:320px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.lock-emoji{font-size:52px;margin-bottom:12px;display:block}
+.lock-title{font-size:20px;font-weight:800;color:#185FA5;margin-bottom:4px}
+.lock-sub{font-size:12px;color:#888;margin-bottom:20px}
+.lock-input{width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:12px;font-size:18px;text-align:center;letter-spacing:6px;font-weight:700;color:#1a1a1a;background:#f8f9fa;transition:border 0.2s;margin-bottom:10px}
+.lock-input:focus{outline:none;border-color:#185FA5;background:white}
+.lock-btn{width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#185FA5,#534AB7);color:white;font-size:14px;font-weight:800;cursor:pointer;transition:transform 0.2s;margin-bottom:8px}
+.lock-btn:active{transform:scale(0.97)}
+.lock-err{font-size:11px;color:#A32D2D;min-height:16px;margin-bottom:4px}
+.lock-hint{font-size:10px;color:#bbb;margin-top:8px}
+.lock-screen.hid{display:none}
+/* MODO SOLO LECTURA — deshabilitar interacciones */
+.readonly .sbadge{pointer-events:none;opacity:0.8}
+.readonly .comp-btn{pointer-events:none;opacity:0.6}
+.readonly .nota-area{pointer-events:none;background:#f5f5f5;color:#888}
+.readonly .add-btn{display:none}
+.readonly .t-del{display:none}
+.readonly .chk{pointer-events:none}
+.readonly .s-btn{display:none}
+.readonly .stv-edit{pointer-events:none;border-bottom:none}
+.readonly .tl-dot{pointer-events:none}
+.readonly-badge{display:inline-block;background:#E6F1FB;color:#185FA5;font-size:9px;padding:2px 8px;border-radius:10px;font-weight:700;margin-left:6px;vertical-align:middle}
 </style>
 </head>
 <body>
+
+<div class="lock-screen" id="lock-screen">
+  <div class="lock-box">
+    <span class="lock-emoji">✈️</span>
+    <div class="lock-title">Europa 2026</div>
+    <div class="lock-sub">Andrés & Mailyn · Ingresa el código de acceso</div>
+    <input class="lock-input" id="lock-input" type="password" maxlength="8" placeholder="••••" 
+      onkeydown="if(event.key==='Enter')checkCode()" autocomplete="off">
+    <div class="lock-err" id="lock-err"></div>
+    <button class="lock-btn" onclick="checkCode()">Entrar →</button>
+    <div class="lock-hint">Código editor o código visor</div>
+  </div>
+</div>
+
 <div class="app">
 
 <div class="hdr">
@@ -1097,6 +1136,63 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 
 <script>
+
+// ===================== SISTEMA DE ACCESO =====================
+const CODE_EDIT = 'AR2026';   // <- código para editar todo
+const CODE_VIEW = 'MG2026';   // <- código para solo ver
+
+let accessMode = null; // 'edit' | 'view'
+
+function checkCode(){
+  const inp = document.getElementById('lock-input');
+  const err = document.getElementById('lock-err');
+  const val = inp.value.trim().toUpperCase();
+  
+  if(val === CODE_EDIT){
+    accessMode = 'edit';
+    S.set('access', 'edit');
+    unlockApp('edit');
+  } else if(val === CODE_VIEW){
+    accessMode = 'view';
+    S.set('access', 'view');
+    unlockApp('view');
+  } else {
+    err.textContent = '❌ Código incorrecto';
+    inp.value = '';
+    inp.focus();
+    setTimeout(()=>err.textContent='', 2000);
+  }
+}
+
+function unlockApp(mode){
+  S.set('access-time', Date.now());
+  document.getElementById('lock-screen').classList.add('hid');
+  if(mode === 'view'){
+    document.querySelector('.app').classList.add('readonly');
+    // Agregar badge "Solo lectura" en el header
+    const hdr = document.querySelector('.hdr h1');
+    if(hdr) hdr.insertAdjacentHTML('afterend','<span class="readonly-badge">👁 Solo lectura</span>');
+  }
+}
+
+function initAccess(){
+  // Recordar acceso por 8 horas
+  const saved = S.get('access');
+  const savedTime = S.get('access-time');
+  const eightHours = 8 * 60 * 60 * 1000;
+  
+  if(saved && savedTime && (Date.now() - savedTime) < eightHours){
+    accessMode = saved;
+    unlockApp(saved);
+  } else {
+    // Mostrar lock
+    document.getElementById('lock-screen').classList.remove('hid');
+    setTimeout(()=>document.getElementById('lock-input').focus(), 300);
+  }
+}
+
+initAccess();
+
 // STORAGE
 const S={
   get(k){try{return JSON.parse(localStorage.getItem('eu26_'+k))}catch{return null}},
