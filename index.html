@@ -351,6 +351,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .cfg-save-btn:active{opacity:0.85}
 .cfg-saved{text-align:center;font-size:11px;color:var(--green);margin-top:8px;min-height:16px}
 .cfg-note{font-size:10px;color:var(--muted);background:var(--bg2);border-radius:8px;padding:8px 10px;margin-bottom:12px;line-height:1.5}
+
+/* GASTOS */
+.gasto-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.gasto-item:last-child{border-bottom:none}
+.gasto-desc{flex:1;font-size:11px;color:var(--text)}
+.gasto-ciudad{font-size:9px;color:var(--muted);background:var(--bg2);padding:2px 6px;border-radius:8px;white-space:nowrap}
+.gasto-monto{font-size:12px;font-weight:800;color:var(--text);white-space:nowrap;min-width:50px;text-align:right}
+.gasto-del{font-size:14px;color:var(--muted);cursor:pointer;opacity:0;transition:opacity 0.2s;flex-shrink:0}
+.gasto-item:hover .gasto-del{opacity:1}
+.gasto-form{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.gasto-inp{flex:2;min-width:100px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;font-size:11px;background:var(--bg2);color:var(--text)}
+.gasto-monto-inp{flex:1;min-width:70px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;font-size:11px;background:var(--bg2);color:var(--text);text-align:right}
+.gasto-city-sel{padding:8px;border:1px solid var(--border);border-radius:9px;font-size:10px;background:var(--bg2);color:var(--text)}
+.gasto-add-btn{padding:8px 14px;border:none;border-radius:9px;background:var(--blue);color:white;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.gasto-total{display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:2px solid var(--border);margin-top:6px}
+.gasto-total-lbl{font-size:11px;font-weight:700;color:var(--text)}
+.gasto-total-val{font-size:16px;font-weight:800;color:var(--red)}
+
+.precio-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.precio-row:last-child{border-bottom:none}
+.precio-lbl{font-size:10px;color:var(--muted);flex:1}
+.precio-inp{width:100px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;text-align:right;background:var(--bg2);color:var(--text)}
+.precio-inp:focus{outline:none;border-color:var(--blue);background:var(--card)}
+.precio-hint{font-size:9px;color:var(--muted);margin-top:4px}
 </style>
 </head>
 <body>
@@ -403,7 +427,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 <div class="stats">
   <div class="st"><div class="stl">Presupuesto</div><div class="stv" id="st-presupuesto">€5.465</div><div class="sts" id="st-presupuesto-sub">19M COP + €1.000</div></div>
-  <div class="st"><div class="stl">Pagado <span style="font-size:8px;color:var(--blue);cursor:pointer" onclick="editPagado()">✏️</span></div><div class="stv stv-edit" style="color:#3B6D11" id="pagado-v" onclick="editPagado()"><span id="st-pagado">€615</span></div><div class="stat-input-wrap" id="pagado-wrap"><input class="stat-inp" id="pagado-inp" type="text" placeholder="€615" onblur="savePagado()" onkeydown="if(event.key==='Enter')savePagado()"></div><div class="sts" id="st-pagado-sub">Hotel BCN</div></div>
+  <div class="st"><div class="stl">Pagado</div><div class="stv stv-edit" style="color:#3B6D11" id="pagado-v" ><span id="st-pagado">€615</span></div><div class="sts" id="st-pagado-sub">Hotel BCN</div></div>
   <div class="st"><div class="stl">Tareas</div><div class="stv" id="pct-el">0%</div><div class="sts">Completadas</div></div>
   <div class="st"><div class="stl">Días</div><div class="stv" id="days-el">20</div><div class="sts">Para el viaje</div></div>
 </div>
@@ -418,7 +442,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <button class="tab" onclick="showTab('presupuesto',this)">Presupuesto</button>
   <button class="tab" onclick="showTab('maleta',this)">Maleta</button>
   <button class="tab" onclick="showTab('tips',this)">Tips</button>
-  <button class="tab" onclick="showTab('config',this)">⚙️ Config</button>
 </div>
 
 <!-- ITINERARIO -->
@@ -447,6 +470,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-bcn" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-bcn">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel Barcelona</span>
+        <input class="precio-inp" id="precio-bcn" type="text" placeholder="€0" value="615" 
+          oninput="savePrecio('bcn')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="bcn-horario" class="cpanel">
       <div class="abox a-blue"><div class="atxt2"><span class="at">Día 3 — Llegada 12:50 PM</span>Ir suave. Vienen 17h de viaje desde Bogotá.</div></div>
@@ -510,6 +539,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-cat" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-cat">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel Catania</span>
+        <input class="precio-inp" id="precio-cat" type="text" placeholder="€0" value="" 
+          oninput="savePrecio('cat')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="cat-horario" class="cpanel">
       <div class="abox a-blue"><div class="atxt2"><span class="at">Día 6 mayo — Llegada vuelo 19:10</span>Taxi fijo €15-20 desde el aeropuerto. No negociar precio. Check-in y descanso.</div></div>
@@ -573,6 +608,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-sor" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-sor">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel Sorrento</span>
+        <input class="precio-inp" id="precio-sor" type="text" placeholder="€0" value="" 
+          oninput="savePrecio('sor')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="sor-horario" class="cpanel">
       <div class="abox a-blue"><div class="atxt2"><span class="at">Día 11 mayo — Llegada desde Nápoles</span>Circumvesuviana 70 min · €3.50 · Llegan Sorrento al mediodía.</div></div>
@@ -630,6 +671,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-flo" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-flo">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel Florencia</span>
+        <input class="precio-inp" id="precio-flo" type="text" placeholder="€0" value="" 
+          oninput="savePrecio('flo')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="flo-horario" class="cpanel">
       <div class="abox a-blue"><div class="atxt2"><span class="at">Día 14 mayo — Llegada desde Sorrento</span>Tren alta velocidad · Llegar tarde. Check-in y Piazzale Michelangelo al atardecer.</div></div>
@@ -688,6 +735,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-ven" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-ven">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel Venecia</span>
+        <input class="precio-inp" id="precio-ven" type="text" placeholder="€0" value="" 
+          oninput="savePrecio('ven')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="ven-horario" class="cpanel">
       <div class="abox a-blue"><div class="atxt2"><span class="at">Día 16 mayo — Llegada desde Florencia</span>Tren 2h15. Llegan por la tarde. Dejar maletas y salir a caminar sin mapa.</div></div>
@@ -745,6 +798,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-rom" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-rom">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel Roma</span>
+        <input class="precio-inp" id="precio-rom" type="text" placeholder="€0" value="" 
+          oninput="savePrecio('rom')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="rom-horario" class="cpanel">
       <div class="hr-row"><div class="hrtime">Día 1</div><div class="hrline"></div><div class="hrinfo"><div class="hrtitle">Coliseo + Foro Romano</div><div class="hrdesc"><a href="https://www.coopculture.it" target="_blank">coopculture.it ↗</a> · <a href="https://maps.google.com/?q=Colosseum+Rome" target="_blank">📍</a></div></div></div>
@@ -802,6 +861,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
         <textarea class="nota-area" id="nota-par" placeholder="Hotel: nombre del hotel&#10;Conf: #123456&#10;Precio: €90/noche&#10;Cualquier nota..."></textarea>
         <div class="nota-saved" id="nota-saved-par">✓ Guardado automático</div>
       </div>
+      <div class="precio-row">
+        <span class="precio-lbl">💰 Precio Hotel París</span>
+        <input class="precio-inp" id="precio-par" type="text" placeholder="€0" value="" 
+          oninput="savePrecio('par')" title="Al marcar como reservado se suma al pagado">
+      </div>
+      <div class="precio-hint" style="padding:0 0 6px">💡 Este monto se suma a "Pagado" cuando marcas el hotel como ✓</div>
     </div>
     <div id="par-horario" class="cpanel">
       <div class="abox a-amber"><div class="atxt2"><span class="at">⚠️ Confirmar con Air France</span>Verificar si la escala permite salir del aeropuerto o es conexión directa. Si es conexión directa no se puede salir sin arriesgar el vuelo a Bogotá.</div></div>
@@ -1066,6 +1131,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <div class="bg-row"><div class="bg-cat">Compras e imprevistos</div><div class="bg-bar-w"><div class="bg-bar" style="width:10%;background:#888780"></div></div><div class="bg-amt" id="bg-compras">€500</div></div>
     <div class="bg-row" style="border-top:1px solid var(--border);padding-top:9px;margin-top:4px"><div class="bg-cat" style="font-weight:700">Total estimado</div><div class="bg-bar-w"></div><div class="bg-amt" style="font-weight:700">€4.880</div></div>
   </div>
+  <div class="sec-title">🧾 Registro de gastos</div>
+  <div class="card">
+    <div class="gasto-form">
+      <input class="gasto-inp" id="g-desc" placeholder="Descripción (ej: Cena Trastevere)" onkeydown="if(event.key==='Enter')addGasto()">
+      <input class="gasto-monto-inp" id="g-monto" placeholder="€0" type="text" onkeydown="if(event.key==='Enter')addGasto()">
+      <select class="gasto-city-sel" id="g-ciudad">
+        <option value="BCN">🇪🇸 BCN</option>
+        <option value="CTA">🌋 CTA</option>
+        <option value="SOR">🌊 SOR</option>
+        <option value="FLO">🎨 FLO</option>
+        <option value="VEN">🚤 VEN</option>
+        <option value="ROM">🏛 ROM</option>
+        <option value="PAR">🇫🇷 PAR</option>
+        <option value="General">✈️ General</option>
+      </select>
+      <button class="gasto-add-btn" onclick="addGasto()">+ Agregar</button>
+    </div>
+    <div id="gastos-list"></div>
+    <div class="gasto-total">
+      <span class="gasto-total-lbl">Total gastado</span>
+      <span class="gasto-total-val" id="gastos-total">€0</span>
+    </div>
+  </div>
+
+  <div class="sec-title">✏️ Editar presupuesto</div>
+  <div class="card">
+    <div class="cfg-note">Cambia los valores y toca Guardar. Se aplica en toda la app.</div>
+    <div class="cfg-row"><span class="cfg-label">Presupuesto total</span><input class="cfg-inp" id="cfg-presupuesto" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Sub-título</span><input class="cfg-inp" id="cfg-presupuesto-sub" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Total pagado</span><input class="cfg-inp" id="cfg-pagado" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Descripción pagado</span><input class="cfg-inp" id="cfg-pagado-sub" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Gasto estimado</span><input class="cfg-inp" id="cfg-estimado" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Colchón</span><input class="cfg-inp" id="cfg-colchon" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Hoteles</span><input class="cfg-inp" id="cfg-b-hoteles" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Comidas</span><input class="cfg-inp" id="cfg-b-comidas" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Trenes Italia</span><input class="cfg-inp" id="cfg-b-trenes" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Entradas museos</span><input class="cfg-inp" id="cfg-b-entradas" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Transporte local</span><input class="cfg-inp" id="cfg-b-transporte" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Compras</span><input class="cfg-inp" id="cfg-b-compras" type="text"></div>
+    <div class="cfg-row"><span class="cfg-label">Tasa EUR/COP</span><input class="cfg-inp" id="cfg-tasa" type="text"></div>
+    <button class="cfg-save-btn" onclick="saveConfig()">💾 Guardar cambios</button>
+    <div class="cfg-saved" id="cfg-saved-msg"></div>
+  </div>
+
   <div class="sec-title">Tarjetas</div>
   <div class="card">
     <div class="row"><span class="rl">Principal</span><span class="rv"><a href="https://littio.co" target="_blank">Littio Card ↗</a> · Sin comisiones · Para todo</span></div>
@@ -1144,45 +1253,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 </div>
 
 
-<!-- CONFIG -->
-<div id="config" class="sec">
-  <div class="card">
-    <div class="cfg-note">✏️ Cambia cualquier dato aquí y toca <strong>Guardar</strong>. Se aplica de inmediato en toda la app.</div>
-
-    <div class="cfg-section">
-      <div class="cfg-title">💰 Presupuesto</div>
-      <div class="cfg-row"><span class="cfg-label">Presupuesto total</span><input class="cfg-inp" id="cfg-presupuesto" type="text" placeholder="€5.465"></div>
-      <div class="cfg-row"><span class="cfg-label">Sub-título presupuesto</span><input class="cfg-inp" id="cfg-presupuesto-sub" type="text" placeholder="19M COP + €1.000"></div>
-      <div class="cfg-row"><span class="cfg-label">Total pagado</span><input class="cfg-inp" id="cfg-pagado" type="text" placeholder="€615"></div>
-      <div class="cfg-row"><span class="cfg-label">Sub-título pagado</span><input class="cfg-inp" id="cfg-pagado-sub" type="text" placeholder="Hotel BCN"></div>
-      <div class="cfg-row"><span class="cfg-label">Gasto estimado</span><input class="cfg-inp" id="cfg-estimado" type="text" placeholder="€4.880"></div>
-      <div class="cfg-row"><span class="cfg-label">Colchón / imprevistos</span><input class="cfg-inp" id="cfg-colchon" type="text" placeholder="€585"></div>
-      <div class="cfg-row"><span class="cfg-label">Tasa EUR/COP</span><input class="cfg-inp" id="cfg-tasa" type="text" placeholder="€1 = $4.257 COP"></div>
-    </div>
-
-    <div class="cfg-section">
-      <div class="cfg-title">✈️ Viaje</div>
-      <div class="cfg-row"><span class="cfg-label">Subtítulo del header</span><input class="cfg-inp" id="cfg-header-sub" type="text" placeholder="2-23 mayo · 20 noches"></div>
-      <div class="cfg-row"><span class="cfg-label">Días del viaje</span><input class="cfg-inp" id="cfg-dias" type="text" placeholder="20"></div>
-    </div>
-
-    <div class="cfg-section">
-      <div class="cfg-title">📊 Presupuesto detallado</div>
-      <div class="cfg-row"><span class="cfg-label">Hoteles</span><input class="cfg-inp" id="cfg-b-hoteles" type="text" placeholder="€2.400"></div>
-      <div class="cfg-row"><span class="cfg-label">Comidas</span><input class="cfg-inp" id="cfg-b-comidas" type="text" placeholder="€1.400"></div>
-      <div class="cfg-row"><span class="cfg-label">Trenes Italia</span><input class="cfg-inp" id="cfg-b-trenes" type="text" placeholder="€380"></div>
-      <div class="cfg-row"><span class="cfg-label">Entradas museos</span><input class="cfg-inp" id="cfg-b-entradas" type="text" placeholder="€300"></div>
-      <div class="cfg-row"><span class="cfg-label">Transporte local</span><input class="cfg-inp" id="cfg-b-transporte" type="text" placeholder="€200"></div>
-      <div class="cfg-row"><span class="cfg-label">Compras e imprevistos</span><input class="cfg-inp" id="cfg-b-compras" type="text" placeholder="€500"></div>
-    </div>
-
-    <button class="cfg-save-btn" onclick="saveConfig()">💾 Guardar cambios</button>
-    <div class="cfg-saved" id="cfg-saved-msg"></div>
-  </div>
-</div>
-
-<div class="footer">Andrés Reyes & Mailyn Castro · Europa 2026 · Hecho con ❤️</div>
-</div>
 
 <!-- CELEBRATION -->
 <div class="cel-overlay hid" id="celebration" onclick="hideCel()">
@@ -1289,6 +1359,8 @@ function unlockApp(mode){
     window.clearNota = function(){};
     window.naughtyAnswer = function(){};
     window.saveConfig = function(){};
+    window.addGasto = function(){};
+    window.delGasto = function(){};
     const h1 = document.querySelector('.hdr h1');
     if(h1) h1.insertAdjacentHTML('afterend','<span class="readonly-badge">👁 Solo lectura</span>');
   }
@@ -1372,6 +1444,7 @@ function cycleSB(id,e){
   renderSB(id,next);
   updatePct();
   if(next===1)showCel('sb',id);
+  if(typeof recalcPagado==='function') setTimeout(recalcPagado,50);
 }
 
 function renderSB(id,state){
@@ -1690,72 +1763,240 @@ function addTask(p){
 }
 renderTasks('a');renderTasks('m');
 
-// ===================== CONFIG EDITABLE =====================
-const CFG_FIELDS = {
-  'cfg-presupuesto':   {sel:'#st-presupuesto',  def:'€5.465'},
-  'cfg-presupuesto-sub':{sel:'#st-presupuesto-sub', def:'19M COP + €1.000'},
-  'cfg-pagado':        {sel:'#st-pagado',        def:'€615'},
-  'cfg-pagado-sub':    {sel:'#st-pagado-sub',    def:'Hotel BCN'},
-  'cfg-estimado':      {sel:'#st-estimado',      def:'€4.880'},
-  'cfg-colchon':       {sel:'#st-colchon',       def:'€585'},
-  'cfg-tasa':          {sel:'#cfg-tasa-display', def:'€1 = $4.257 COP'},
-  'cfg-header-sub':    {sel:'.hdr p',            def:'Andrés Reyes & Mailyn Castro · 2-23 mayo · 20 noches · 6 ciudades + París 24h'},
-  'cfg-dias':          {sel:'#days-el',          def:'20'},
-  'cfg-b-hoteles':     {sel:'#bg-hoteles',       def:'€2.400'},
-  'cfg-b-comidas':     {sel:'#bg-comidas',       def:'€1.400'},
-  'cfg-b-trenes':      {sel:'#bg-trenes',        def:'€380'},
-  'cfg-b-entradas':    {sel:'#bg-entradas',      def:'€300'},
-  'cfg-b-transporte':  {sel:'#bg-transporte',    def:'€200'},
-  'cfg-b-compras':     {sel:'#bg-compras',       def:'€500'},
+// ===================== PRECIOS Y SUMA AUTOMÁTICA =====================
+var PRECIO_IDS = ['bcn','cat','sor','flo','ven','rom','par',
+  'vuelo-cat-nap','tr-tnap','tr-tnap2','tr-tflo','tr-tven'];
+
+function savePrecio(id){
+  const el = document.getElementById('precio-'+id);
+  if(el) S.set('precio-'+id, el.value.trim());
+}
+
+function getPrecio(id){
+  const saved = S.get('precio-'+id);
+  const el = document.getElementById('precio-'+id);
+  const val = saved || (el ? el.value : '') || '0';
+  return parseFloat(val.replace(/[€$,]/g,'').replace(',','.')) || 0;
+}
+
+function initPrecios(){
+  PRECIO_IDS.forEach(id=>{
+    const el = document.getElementById('precio-'+id);
+    if(el){
+      const saved = S.get('precio-'+id);
+      if(saved) el.value = saved;
+    }
+  });
+}
+
+function recalcPagado(){
+  // Sumar todos los que están en estado OK (1)
+  var SB_IDS = ['hotel-bcn','hotel-cat','hotel-sor','hotel-flo','hotel-ven','hotel-rom','hotel-par',
+    'tr-vbog','tr-vbcn','tr-vcat','tr-vrom','tr-tnap','tr-tnap2','tr-tflo','tr-tven'];
+  
+  // Mapa badge → precio id
+  var BADGE_TO_PRECIO = {
+    'hotel-bcn':'bcn', 'hotel-cat':'cat', 'hotel-sor':'sor',
+    'hotel-flo':'flo', 'hotel-ven':'ven', 'hotel-rom':'rom', 'hotel-par':'par',
+    'tr-vcat':'vuelo-cat-nap',
+    'tr-tnap':'tr-tnap', 'tr-tnap2':'tr-tnap2', 'tr-tflo':'tr-tflo', 'tr-tven':'tr-tven',
+  };
+  // Vuelos ya comprados siempre suman si tienen precio
+  var ALWAYS_OK = ['tr-vbog','tr-vbcn','tr-vrom'];
+  
+  let total = 0;
+  SB_IDS.forEach(badgeId=>{
+    const state = S.get('sb-'+badgeId);
+    const isOk = (state===1) || (state===null && ['tr-vbog','tr-vbcn','tr-vrom','hotel-bcn'].includes(badgeId));
+    if(isOk){
+      const precioId = BADGE_TO_PRECIO[badgeId];
+      if(precioId) total += getPrecio(precioId);
+    }
+  });
+  
+  // Sumar gastos manuales también
+  const gastos = S.get('gastos') || [];
+  gastos.forEach(g=>{
+    const n = parseFloat((g.monto||'0').replace(/[^0-9.]/g,'')) || 0;
+    total += n;
+  });
+  
+  // Actualizar el display de pagado
+  const display = document.getElementById('st-pagado');
+  if(display && total > 0) display.textContent = '€'+total.toFixed(0);
+  const sub = document.getElementById('st-pagado-sub');
+  if(sub && total > 0) sub.textContent = 'Reservas + gastos';
+  
+
+}
+
+function getPrecioFromText(txt){
+  return parseFloat((txt||'').replace(/[^0-9.]/g,'')) || 0;
+}
+
+
+
+
+
+// ===================== REGISTRO DE GASTOS =====================
+let gastos = S.get('gastos') || [];
+
+function addGasto(){
+  const desc  = document.getElementById('g-desc');
+  const monto = document.getElementById('g-monto');
+  const ciudad= document.getElementById('g-ciudad');
+  if(!desc||!monto) return;
+  const d = desc.value.trim();
+  const m = monto.value.trim().replace(',','.');
+  if(!d || !m) return;
+  gastos.push({
+    id: Date.now(),
+    desc: d,
+    monto: m,
+    ciudad: ciudad ? ciudad.value : '',
+    fecha: new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'2-digit'})
+  });
+  S.set('gastos', gastos);
+  desc.value=''; monto.value='';
+  renderGastos();
+  recalcPagado();
+}
+
+function delGasto(id){
+  gastos = gastos.filter(g=>g.id!==id);
+  S.set('gastos', gastos);
+  renderGastos();
+  recalcPagado();
+}
+
+function renderGastos(){
+  const list = document.getElementById('gastos-list');
+  const totalEl = document.getElementById('gastos-total');
+  if(!list) return;
+  list.innerHTML='';
+  let total = 0;
+  if(gastos.length===0){
+    list.innerHTML='<div style="font-size:11px;color:var(--muted);padding:8px 0;text-align:center">Sin gastos registrados aún</div>';
+  }
+  gastos.forEach(g=>{
+    const num = parseFloat(g.monto.replace(/[^0-9.]/g,''))||0;
+    total += num;
+    const div = document.createElement('div');
+    div.className='gasto-item';
+    div.innerHTML=`
+      <div>
+        <div class="gasto-desc">${g.desc}</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px">${g.fecha}${g.ciudad?' · '+g.ciudad:''}</div>
+      </div>
+      <span class="gasto-ciudad">${g.ciudad||''}</span>
+      <span class="gasto-monto">${g.monto.startsWith('€')?g.monto:'€'+g.monto}</span>
+      <span class="gasto-del" onclick="delGasto(${g.id})">✕</span>
+    `;
+    list.appendChild(div);
+  });
+  if(totalEl) totalEl.textContent = '€'+total.toFixed(2);
+}
+
+renderGastos();
+
+
+// ===================== CONFIG =====================
+const CFG_DEFAULTS = {
+  presupuesto:    '€5.465',
+  presupuestoSub: '19M COP + €1.000',
+  pagado:         '€615',
+  pagadoSub:      'Hotel BCN',
+  estimado:       '€4.880',
+  colchon:        '€585',
+  tasa:           '€1 = $4.257 COP',
+  headerSub:      'Andrés Reyes & Mailyn Castro · 2-23 mayo · 20 noches · 6 ciudades + París 24h',
+  bHoteles:       '€2.400',
+  bComidas:       '€1.400',
+  bTrenes:        '€380',
+  bEntradas:      '€300',
+  bTransporte:    '€200',
+  bCompras:       '€500',
 };
 
+function cfgGet(key){ return S.get('c_'+key) || CFG_DEFAULTS[key]; }
+function cfgSet(key,val){ S.set('c_'+key, val); }
+
+function applyConfig(){
+  setText('st-presupuesto',   cfgGet('presupuesto'));
+  setText('st-presupuesto-sub', cfgGet('presupuestoSub'));
+  // pagado — el span dentro del div
+  setText('st-pagado',        cfgGet('pagado'));
+  setText('st-pagado-sub',    cfgGet('pagadoSub'));
+  setText('st-estimado',      cfgGet('estimado'));
+  setText('st-colchon',       cfgGet('colchon'));
+  setText('cfg-tasa-display', cfgGet('tasa'));
+  // header subtítulo
+  const hp = document.querySelector('.hdr p');
+  if(hp) hp.textContent = cfgGet('headerSub');
+  // presupuesto detallado
+  setText('bg-hoteles',    cfgGet('bHoteles'));
+  setText('bg-comidas',    cfgGet('bComidas'));
+  setText('bg-trenes',     cfgGet('bTrenes'));
+  setText('bg-entradas',   cfgGet('bEntradas'));
+  setText('bg-transporte', cfgGet('bTransporte'));
+  setText('bg-compras',    cfgGet('bCompras'));
+  // poner valores actuales en los inputs del config
+  setInp('cfg-presupuesto',     cfgGet('presupuesto'));
+  setInp('cfg-presupuesto-sub', cfgGet('presupuestoSub'));
+  setInp('cfg-pagado',          cfgGet('pagado'));
+  setInp('cfg-pagado-sub',      cfgGet('pagadoSub'));
+  setInp('cfg-estimado',        cfgGet('estimado'));
+  setInp('cfg-colchon',         cfgGet('colchon'));
+  setInp('cfg-tasa',            cfgGet('tasa'));
+  setInp('cfg-header-sub',      cfgGet('headerSub'));
+  setInp('cfg-b-hoteles',       cfgGet('bHoteles'));
+  setInp('cfg-b-comidas',       cfgGet('bComidas'));
+  setInp('cfg-b-trenes',        cfgGet('bTrenes'));
+  setInp('cfg-b-entradas',      cfgGet('bEntradas'));
+  setInp('cfg-b-transporte',    cfgGet('bTransporte'));
+  setInp('cfg-b-compras',       cfgGet('bCompras'));
+}
+
+function setText(id, val){
+  const el = document.getElementById(id);
+  if(el) el.textContent = val;
+}
+
+function setInp(id, val){
+  const el = document.getElementById(id);
+  if(el) el.value = val;
+}
+
 function saveConfig(){
-  Object.keys(CFG_FIELDS).forEach(id=>{
-    const inp = document.getElementById(id);
-    if(!inp) return;
-    const val = inp.value.trim();
-    if(val) S.set('cfg-'+id, val);
+  const map = {
+    'cfg-presupuesto':    'presupuesto',
+    'cfg-presupuesto-sub':'presupuestoSub',
+    'cfg-pagado':         'pagado',
+    'cfg-pagado-sub':     'pagadoSub',
+    'cfg-estimado':       'estimado',
+    'cfg-colchon':        'colchon',
+    'cfg-tasa':           'tasa',
+    'cfg-header-sub':     'headerSub',
+    'cfg-b-hoteles':      'bHoteles',
+    'cfg-b-comidas':      'bComidas',
+    'cfg-b-trenes':       'bTrenes',
+    'cfg-b-entradas':     'bEntradas',
+    'cfg-b-transporte':   'bTransporte',
+    'cfg-b-compras':      'bCompras',
+  };
+  Object.keys(map).forEach(inputId=>{
+    const el = document.getElementById(inputId);
+    if(el && el.value.trim()) cfgSet(map[inputId], el.value.trim());
   });
   applyConfig();
   const msg = document.getElementById('cfg-saved-msg');
-  if(msg){ msg.textContent='✅ Guardado correctamente'; setTimeout(()=>msg.textContent='', 2500); }
+  if(msg){ msg.textContent='✅ Guardado'; setTimeout(()=>{ msg.textContent=''; },2000); }
 }
 
-function applyConfig(){
-  // Stats principales
-  applyVal('cfg-presupuesto', '#st-presupuesto', '€5.465');
-  applyVal('cfg-presupuesto-sub', '#st-presupuesto-sub', '19M COP + €1.000');
-  applyVal('cfg-pagado', '#st-pagado', '€615');
-  applyVal('cfg-pagado-sub', '#st-pagado-sub', 'Hotel BCN');
-  applyVal('cfg-estimado', '#st-estimado', '€4.880');
-  applyVal('cfg-colchon', '#st-colchon', '€585');
-  applyVal('cfg-header-sub', '.hdr p', 'Andrés Reyes & Mailyn Castro · 2-23 mayo');
-  // días
-  const dias = S.get('cfg-cfg-dias');
-  if(dias){ const el=document.getElementById('days-el'); if(el) el.textContent=dias; }
-  // presupuesto detallado
-  applyVal('cfg-b-hoteles', '#bg-hoteles', '€2.400');
-  applyVal('cfg-b-comidas', '#bg-comidas', '€1.400');
-  applyVal('cfg-b-trenes', '#bg-trenes', '€380');
-  applyVal('cfg-b-entradas', '#bg-entradas', '€300');
-  applyVal('cfg-b-transporte', '#bg-transporte', '€200');
-  applyVal('cfg-b-compras', '#bg-compras', '€500');
-  applyVal('cfg-pagado', '#pagado-v', '€615');
-  // Cargar valores en los inputs
-  Object.keys(CFG_FIELDS).forEach(id=>{
-    const inp = document.getElementById(id);
-    const saved = S.get('cfg-'+id);
-    if(inp && saved) inp.value = saved;
-  });
-}
-
-function applyVal(cfgKey, selector, def){
-  const val = S.get('cfg-'+cfgKey) || def;
-  document.querySelectorAll(selector).forEach(el=>{ el.textContent = val; });
-}
-
-// Aplicar al cargar
 applyConfig();
+
+
+
 
 
 // ===================== NOTAS EDITABLES =====================
@@ -1812,6 +2053,9 @@ function initPagado(){
   if(saved&&v)v.textContent=saved;
 }
 initPagado();
+initPrecios();
+renderGastos();
+recalcPagado();
 
 </script>
 
