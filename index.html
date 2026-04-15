@@ -335,6 +335,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .readonly .face-btn{pointer-events:none !important;cursor:default !important}
 .readonly .n-btn{pointer-events:none !important}
 .readonly .cal-nav{pointer-events:none !important;opacity:0.4}
+
+/* CONFIG */
+.readonly .cfg-inp{pointer-events:none !important;background:#f5f5f5 !important}
+.readonly .cfg-save-btn{pointer-events:none !important;opacity:0.4 !important}
+
+.cfg-section{margin-bottom:16px}
+.cfg-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.cfg-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.cfg-row:last-child{border-bottom:none}
+.cfg-label{font-size:11px;color:var(--muted);flex:1}
+.cfg-inp{padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;color:var(--text);background:var(--bg2);text-align:right;width:130px;transition:border 0.2s}
+.cfg-inp:focus{outline:none;border-color:var(--blue);background:var(--card)}
+.cfg-save-btn{width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,#185FA5,#534AB7);color:white;font-size:13px;font-weight:800;cursor:pointer;margin-top:12px;transition:opacity 0.2s}
+.cfg-save-btn:active{opacity:0.85}
+.cfg-saved{text-align:center;font-size:11px;color:var(--green);margin-top:8px;min-height:16px}
+.cfg-note{font-size:10px;color:var(--muted);background:var(--bg2);border-radius:8px;padding:8px 10px;margin-bottom:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -386,8 +402,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 </div>
 
 <div class="stats">
-  <div class="st"><div class="stl">Presupuesto</div><div class="stv">€5.465</div><div class="sts">19M COP + €1.000</div></div>
-  <div class="st"><div class="stl">Pagado <span style="font-size:8px;color:var(--blue);cursor:pointer" onclick="editPagado()">✏️</span></div><div class="stv stv-edit" style="color:#3B6D11" id="pagado-v" onclick="editPagado()">€615</div><div class="stat-input-wrap" id="pagado-wrap"><input class="stat-inp" id="pagado-inp" type="text" placeholder="€615" onblur="savePagado()" onkeydown="if(event.key==='Enter')savePagado()"></div><div class="sts" id="pagado-sub">Hotel BCN</div></div>
+  <div class="st"><div class="stl">Presupuesto</div><div class="stv" id="st-presupuesto">€5.465</div><div class="sts" id="st-presupuesto-sub">19M COP + €1.000</div></div>
+  <div class="st"><div class="stl">Pagado <span style="font-size:8px;color:var(--blue);cursor:pointer" onclick="editPagado()">✏️</span></div><div class="stv stv-edit" style="color:#3B6D11" id="pagado-v" onclick="editPagado()"><span id="st-pagado">€615</span></div><div class="stat-input-wrap" id="pagado-wrap"><input class="stat-inp" id="pagado-inp" type="text" placeholder="€615" onblur="savePagado()" onkeydown="if(event.key==='Enter')savePagado()"></div><div class="sts" id="st-pagado-sub">Hotel BCN</div></div>
   <div class="st"><div class="stl">Tareas</div><div class="stv" id="pct-el">0%</div><div class="sts">Completadas</div></div>
   <div class="st"><div class="stl">Días</div><div class="stv" id="days-el">20</div><div class="sts">Para el viaje</div></div>
 </div>
@@ -402,6 +418,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <button class="tab" onclick="showTab('presupuesto',this)">Presupuesto</button>
   <button class="tab" onclick="showTab('maleta',this)">Maleta</button>
   <button class="tab" onclick="showTab('tips',this)">Tips</button>
+  <button class="tab" onclick="showTab('config',this)">⚙️ Config</button>
 </div>
 
 <!-- ITINERARIO -->
@@ -1036,24 +1053,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <div class="bg-grid">
     <div class="mini"><div class="ml">Total</div><div class="mv">€5.465</div><div class="ms">19M COP + €1.000</div></div>
     <div class="mini"><div class="ml">Pagado</div><div class="mv" style="color:#3B6D11">€615</div><div class="ms">Hotel BCN</div></div>
-    <div class="mini"><div class="ml">Estimado</div><div class="mv">€4.880</div><div class="ms">Plan actual</div></div>
-    <div class="mini"><div class="ml">Colchón</div><div class="mv" style="color:#3B6D11">€585</div><div class="ms">Imprevistos</div></div>
+    <div class="mini"><div class="ml">Estimado</div><div class="mv" id="st-estimado">€4.880</div><div class="ms">Plan actual</div></div>
+    <div class="mini"><div class="ml">Colchón</div><div class="mv" style="color:#3B6D11" id="st-colchon">€585</div><div class="ms">Imprevistos</div></div>
   </div>
   <div class="sec-title">Distribución del gasto</div>
   <div class="card">
-    <div class="bg-row"><div class="bg-cat">Hoteles 20 noches</div><div class="bg-bar-w"><div class="bg-bar" style="width:60%;background:#185FA5"></div></div><div class="bg-amt">€2.400</div></div>
-    <div class="bg-row"><div class="bg-cat">Comidas 20 días</div><div class="bg-bar-w"><div class="bg-bar" style="width:35%;background:#1D9E75"></div></div><div class="bg-amt">€1.400</div></div>
-    <div class="bg-row"><div class="bg-cat">Trenes Italia</div><div class="bg-bar-w"><div class="bg-bar" style="width:16%;background:#D85A30"></div></div><div class="bg-amt">€380</div></div>
-    <div class="bg-row"><div class="bg-cat">Entradas museos</div><div class="bg-bar-w"><div class="bg-bar" style="width:12%;background:#BA7517"></div></div><div class="bg-amt">€300</div></div>
-    <div class="bg-row"><div class="bg-cat">Transporte local</div><div class="bg-bar-w"><div class="bg-bar" style="width:8%;background:#534AB7"></div></div><div class="bg-amt">€200</div></div>
-    <div class="bg-row"><div class="bg-cat">Compras e imprevistos</div><div class="bg-bar-w"><div class="bg-bar" style="width:10%;background:#888780"></div></div><div class="bg-amt">€500</div></div>
+    <div class="bg-row"><div class="bg-cat">Hoteles 20 noches</div><div class="bg-bar-w"><div class="bg-bar" style="width:60%;background:#185FA5"></div></div><div class="bg-amt" id="bg-hoteles">€2.400</div></div>
+    <div class="bg-row"><div class="bg-cat">Comidas 20 días</div><div class="bg-bar-w"><div class="bg-bar" style="width:35%;background:#1D9E75"></div></div><div class="bg-amt" id="bg-comidas">€1.400</div></div>
+    <div class="bg-row"><div class="bg-cat">Trenes Italia</div><div class="bg-bar-w"><div class="bg-bar" style="width:16%;background:#D85A30"></div></div><div class="bg-amt" id="bg-trenes">€380</div></div>
+    <div class="bg-row"><div class="bg-cat">Entradas museos</div><div class="bg-bar-w"><div class="bg-bar" style="width:12%;background:#BA7517"></div></div><div class="bg-amt" id="bg-entradas">€300</div></div>
+    <div class="bg-row"><div class="bg-cat">Transporte local</div><div class="bg-bar-w"><div class="bg-bar" style="width:8%;background:#534AB7"></div></div><div class="bg-amt" id="bg-transporte">€200</div></div>
+    <div class="bg-row"><div class="bg-cat">Compras e imprevistos</div><div class="bg-bar-w"><div class="bg-bar" style="width:10%;background:#888780"></div></div><div class="bg-amt" id="bg-compras">€500</div></div>
     <div class="bg-row" style="border-top:1px solid var(--border);padding-top:9px;margin-top:4px"><div class="bg-cat" style="font-weight:700">Total estimado</div><div class="bg-bar-w"></div><div class="bg-amt" style="font-weight:700">€4.880</div></div>
   </div>
   <div class="sec-title">Tarjetas</div>
   <div class="card">
     <div class="row"><span class="rl">Principal</span><span class="rv"><a href="https://littio.co" target="_blank">Littio Card ↗</a> · Sin comisiones · Para todo</span></div>
     <div class="row"><span class="rl">Efectivo</span><span class="rv">€500 · Propinas, mercados, emergencias</span></div>
-    <div class="row"><span class="rl">Tasa EUR</span><span class="rv">€1 = $4.257 COP · <a href="https://www.xe.com" target="_blank">XE.com ↗</a></span></div>
+    <div class="row"><span class="rl">Tasa EUR</span><span class="rv"><span id="cfg-tasa-display">€1 = $4.257 COP</span> · <a href="https://www.xe.com" target="_blank">XE.com ↗</a></span></div>
   </div>
 </div>
 
@@ -1123,6 +1140,44 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <div class="row"><span class="rl">Embajada</span><span class="rv">Roma: +39 06 3608 2801</span></div>
     <div class="row"><span class="rl">Air France</span><span class="rv"><a href="https://www.airfrance.com" target="_blank">airfrance.com ↗</a></span></div>
     <div class="row"><span class="rl">Littio</span><span class="rv"><a href="https://littio.co" target="_blank">App Littio ↗</a></span></div>
+  </div>
+</div>
+
+
+<!-- CONFIG -->
+<div id="config" class="sec">
+  <div class="card">
+    <div class="cfg-note">✏️ Cambia cualquier dato aquí y toca <strong>Guardar</strong>. Se aplica de inmediato en toda la app.</div>
+
+    <div class="cfg-section">
+      <div class="cfg-title">💰 Presupuesto</div>
+      <div class="cfg-row"><span class="cfg-label">Presupuesto total</span><input class="cfg-inp" id="cfg-presupuesto" type="text" placeholder="€5.465"></div>
+      <div class="cfg-row"><span class="cfg-label">Sub-título presupuesto</span><input class="cfg-inp" id="cfg-presupuesto-sub" type="text" placeholder="19M COP + €1.000"></div>
+      <div class="cfg-row"><span class="cfg-label">Total pagado</span><input class="cfg-inp" id="cfg-pagado" type="text" placeholder="€615"></div>
+      <div class="cfg-row"><span class="cfg-label">Sub-título pagado</span><input class="cfg-inp" id="cfg-pagado-sub" type="text" placeholder="Hotel BCN"></div>
+      <div class="cfg-row"><span class="cfg-label">Gasto estimado</span><input class="cfg-inp" id="cfg-estimado" type="text" placeholder="€4.880"></div>
+      <div class="cfg-row"><span class="cfg-label">Colchón / imprevistos</span><input class="cfg-inp" id="cfg-colchon" type="text" placeholder="€585"></div>
+      <div class="cfg-row"><span class="cfg-label">Tasa EUR/COP</span><input class="cfg-inp" id="cfg-tasa" type="text" placeholder="€1 = $4.257 COP"></div>
+    </div>
+
+    <div class="cfg-section">
+      <div class="cfg-title">✈️ Viaje</div>
+      <div class="cfg-row"><span class="cfg-label">Subtítulo del header</span><input class="cfg-inp" id="cfg-header-sub" type="text" placeholder="2-23 mayo · 20 noches"></div>
+      <div class="cfg-row"><span class="cfg-label">Días del viaje</span><input class="cfg-inp" id="cfg-dias" type="text" placeholder="20"></div>
+    </div>
+
+    <div class="cfg-section">
+      <div class="cfg-title">📊 Presupuesto detallado</div>
+      <div class="cfg-row"><span class="cfg-label">Hoteles</span><input class="cfg-inp" id="cfg-b-hoteles" type="text" placeholder="€2.400"></div>
+      <div class="cfg-row"><span class="cfg-label">Comidas</span><input class="cfg-inp" id="cfg-b-comidas" type="text" placeholder="€1.400"></div>
+      <div class="cfg-row"><span class="cfg-label">Trenes Italia</span><input class="cfg-inp" id="cfg-b-trenes" type="text" placeholder="€380"></div>
+      <div class="cfg-row"><span class="cfg-label">Entradas museos</span><input class="cfg-inp" id="cfg-b-entradas" type="text" placeholder="€300"></div>
+      <div class="cfg-row"><span class="cfg-label">Transporte local</span><input class="cfg-inp" id="cfg-b-transporte" type="text" placeholder="€200"></div>
+      <div class="cfg-row"><span class="cfg-label">Compras e imprevistos</span><input class="cfg-inp" id="cfg-b-compras" type="text" placeholder="€500"></div>
+    </div>
+
+    <button class="cfg-save-btn" onclick="saveConfig()">💾 Guardar cambios</button>
+    <div class="cfg-saved" id="cfg-saved-msg"></div>
   </div>
 </div>
 
@@ -1233,6 +1288,7 @@ function unlockApp(mode){
     window.saveNota = function(){};
     window.clearNota = function(){};
     window.naughtyAnswer = function(){};
+    window.saveConfig = function(){};
     const h1 = document.querySelector('.hdr h1');
     if(h1) h1.insertAdjacentHTML('afterend','<span class="readonly-badge">👁 Solo lectura</span>');
   }
@@ -1633,6 +1689,74 @@ function addTask(p){
   document.getElementById('add-'+p).style.display='none';
 }
 renderTasks('a');renderTasks('m');
+
+// ===================== CONFIG EDITABLE =====================
+const CFG_FIELDS = {
+  'cfg-presupuesto':   {sel:'#st-presupuesto',  def:'€5.465'},
+  'cfg-presupuesto-sub':{sel:'#st-presupuesto-sub', def:'19M COP + €1.000'},
+  'cfg-pagado':        {sel:'#st-pagado',        def:'€615'},
+  'cfg-pagado-sub':    {sel:'#st-pagado-sub',    def:'Hotel BCN'},
+  'cfg-estimado':      {sel:'#st-estimado',      def:'€4.880'},
+  'cfg-colchon':       {sel:'#st-colchon',       def:'€585'},
+  'cfg-tasa':          {sel:'#cfg-tasa-display', def:'€1 = $4.257 COP'},
+  'cfg-header-sub':    {sel:'.hdr p',            def:'Andrés Reyes & Mailyn Castro · 2-23 mayo · 20 noches · 6 ciudades + París 24h'},
+  'cfg-dias':          {sel:'#days-el',          def:'20'},
+  'cfg-b-hoteles':     {sel:'#bg-hoteles',       def:'€2.400'},
+  'cfg-b-comidas':     {sel:'#bg-comidas',       def:'€1.400'},
+  'cfg-b-trenes':      {sel:'#bg-trenes',        def:'€380'},
+  'cfg-b-entradas':    {sel:'#bg-entradas',      def:'€300'},
+  'cfg-b-transporte':  {sel:'#bg-transporte',    def:'€200'},
+  'cfg-b-compras':     {sel:'#bg-compras',       def:'€500'},
+};
+
+function saveConfig(){
+  Object.keys(CFG_FIELDS).forEach(id=>{
+    const inp = document.getElementById(id);
+    if(!inp) return;
+    const val = inp.value.trim();
+    if(val) S.set('cfg-'+id, val);
+  });
+  applyConfig();
+  const msg = document.getElementById('cfg-saved-msg');
+  if(msg){ msg.textContent='✅ Guardado correctamente'; setTimeout(()=>msg.textContent='', 2500); }
+}
+
+function applyConfig(){
+  // Stats principales
+  applyVal('cfg-presupuesto', '#st-presupuesto', '€5.465');
+  applyVal('cfg-presupuesto-sub', '#st-presupuesto-sub', '19M COP + €1.000');
+  applyVal('cfg-pagado', '#st-pagado', '€615');
+  applyVal('cfg-pagado-sub', '#st-pagado-sub', 'Hotel BCN');
+  applyVal('cfg-estimado', '#st-estimado', '€4.880');
+  applyVal('cfg-colchon', '#st-colchon', '€585');
+  applyVal('cfg-header-sub', '.hdr p', 'Andrés Reyes & Mailyn Castro · 2-23 mayo');
+  // días
+  const dias = S.get('cfg-cfg-dias');
+  if(dias){ const el=document.getElementById('days-el'); if(el) el.textContent=dias; }
+  // presupuesto detallado
+  applyVal('cfg-b-hoteles', '#bg-hoteles', '€2.400');
+  applyVal('cfg-b-comidas', '#bg-comidas', '€1.400');
+  applyVal('cfg-b-trenes', '#bg-trenes', '€380');
+  applyVal('cfg-b-entradas', '#bg-entradas', '€300');
+  applyVal('cfg-b-transporte', '#bg-transporte', '€200');
+  applyVal('cfg-b-compras', '#bg-compras', '€500');
+  applyVal('cfg-pagado', '#pagado-v', '€615');
+  // Cargar valores en los inputs
+  Object.keys(CFG_FIELDS).forEach(id=>{
+    const inp = document.getElementById(id);
+    const saved = S.get('cfg-'+id);
+    if(inp && saved) inp.value = saved;
+  });
+}
+
+function applyVal(cfgKey, selector, def){
+  const val = S.get('cfg-'+cfgKey) || def;
+  document.querySelectorAll(selector).forEach(el=>{ el.textContent = val; });
+}
+
+// Aplicar al cargar
+applyConfig();
+
 
 // ===================== NOTAS EDITABLES =====================
 function saveNota(city){
