@@ -324,8 +324,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <span class="lock-emoji">✈️</span>
     <div class="lock-title">Europa 2026</div>
     <div class="lock-sub">Andrés & Mailyn · Ingresa el código de acceso</div>
-    <input class="lock-input" id="lock-input" type="password" maxlength="8" placeholder="••••" 
-      onkeydown="if(event.key==='Enter')checkCode()" autocomplete="off">
+    <input class="lock-input" id="lock-input" type="text" maxlength="10" placeholder="Código" onkeydown="if(event.key==='Enter')checkCode()" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
     <div class="lock-err" id="lock-err"></div>
     <button class="lock-btn" onclick="checkCode()">Entrar →</button>
     <div class="lock-hint">Código editor o código visor</div>
@@ -1137,67 +1136,99 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 <script>
 
-// ===================== SISTEMA DE ACCESO =====================
-const CODE_EDIT = 'AR2026';   // <- código para editar todo
-const CODE_VIEW = 'MG2026';   // <- código para solo ver
 
-let accessMode = null; // 'edit' | 'view'
-
-function checkCode(){
-  const inp = document.getElementById('lock-input');
-  const err = document.getElementById('lock-err');
-  const val = inp.value.trim().toUpperCase();
-  
-  if(val === CODE_EDIT){
-    accessMode = 'edit';
-    S.set('access', 'edit');
-    unlockApp('edit');
-  } else if(val === CODE_VIEW){
-    accessMode = 'view';
-    S.set('access', 'view');
-    unlockApp('view');
-  } else {
-    err.textContent = '❌ Código incorrecto';
-    inp.value = '';
-    inp.focus();
-    setTimeout(()=>err.textContent='', 2000);
-  }
-}
-
-function unlockApp(mode){
-  S.set('access-time', Date.now());
-  document.getElementById('lock-screen').classList.add('hid');
-  if(mode === 'view'){
-    document.querySelector('.app').classList.add('readonly');
-    // Agregar badge "Solo lectura" en el header
-    const hdr = document.querySelector('.hdr h1');
-    if(hdr) hdr.insertAdjacentHTML('afterend','<span class="readonly-badge">👁 Solo lectura</span>');
-  }
-}
-
-function initAccess(){
-  // Recordar acceso por 8 horas
-  const saved = S.get('access');
-  const savedTime = S.get('access-time');
-  const eightHours = 8 * 60 * 60 * 1000;
-  
-  if(saved && savedTime && (Date.now() - savedTime) < eightHours){
-    accessMode = saved;
-    unlockApp(saved);
-  } else {
-    // Mostrar lock
-    document.getElementById('lock-screen').classList.remove('hid');
-    setTimeout(()=>document.getElementById('lock-input').focus(), 300);
-  }
-}
-
-initAccess();
 
 // STORAGE
 const S={
   get(k){try{return JSON.parse(localStorage.getItem('eu26_'+k))}catch{return null}},
   set(k,v){try{localStorage.setItem('eu26_'+k,JSON.stringify(v))}catch{}}
 };
+
+// ===================== SISTEMA DE ACCESO =====================
+const CODE_EDIT = 'AR2026';
+const CODE_VIEW  = 'MG2026';
+const SESSION_MS = 8 * 60 * 60 * 1000; // 8 horas
+
+function checkCode(){
+  const inp = document.getElementById('lock-input');
+  const err = document.getElementById('lock-err');
+  const val = (inp.value||'').trim().toUpperCase();
+  if(!val){ err.textContent='Ingresa el código'; return; }
+  if(val === CODE_EDIT){
+    saveSession('edit');
+    unlockApp('edit');
+  } else if(val === CODE_VIEW){
+    saveSession('view');
+    unlockApp('view');
+  } else {
+    err.textContent='❌ Código incorrecto';
+    inp.value='';
+    inp.focus();
+    setTimeout(()=>{ err.textContent=''; },2000);
+  }
+}
+
+function saveSession(mode){
+  try{
+    localStorage.setItem('eu26_access', mode);
+    localStorage.setItem('eu26_access_ts', Date.now().toString());
+  }catch(e){}
+}
+
+function getSession(){
+  try{
+    const mode = localStorage.getItem('eu26_access');
+    const ts   = parseInt(localStorage.getItem('eu26_access_ts')||'0');
+    if(mode && (Date.now()-ts) < SESSION_MS) return mode;
+  }catch(e){}
+  return null;
+}
+
+function clearSession(){
+  try{
+    localStorage.removeItem('eu26_access');
+    localStorage.removeItem('eu26_access_ts');
+  }catch(e){}
+}
+
+function unlockApp(mode){
+  // Ocultar pantalla de bloqueo
+  const ls = document.getElementById('lock-screen');
+  if(ls) ls.style.display='none';
+  // Aplicar modo
+  const app = document.querySelector('.app');
+  if(mode === 'view' && app){
+    app.classList.add('readonly');
+    const h1 = document.querySelector('.hdr h1');
+    if(h1) h1.insertAdjacentHTML('afterend','<span class="readonly-badge">👁 Solo lectura</span>');
+  }
+  // Agregar botón cerrar sesión en el footer
+  const footer = document.querySelector('.footer');
+  if(footer){
+    const btn = document.createElement('button');
+    btn.textContent = '🔒 Cerrar sesión';
+    btn.style.cssText='display:block;margin:8px auto 0;background:none;border:none;color:var(--muted);font-size:10px;cursor:pointer;text-decoration:underline';
+    btn.onclick=()=>{ clearSession(); location.reload(); };
+    footer.appendChild(btn);
+  }
+}
+
+function initAccess(){
+  const saved = getSession();
+  if(saved){
+    unlockApp(saved);
+  } else {
+    const ls = document.getElementById('lock-screen');
+    if(ls){ ls.style.display='flex'; }
+    setTimeout(()=>{
+      const inp=document.getElementById('lock-input');
+      if(inp) inp.focus();
+    },300);
+  }
+}
+
+initAccess();
+
 
 // COUNTDOWN
 function updateCountdown(){
